@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/dialog"
 import jsPDF from "jspdf"
 import QRCode from 'qrcode'
-import CertificateVerification from "@/src/artifacts/contracts/CertificateVerification.sol/CertificateVerification.json";
+import CertificateVerification from "../../src/artifacts/contracts/CertificateVerification.sol/CertificateVerification.json";
 import { BigNumber, ethers } from "ethers"
 import { v4 as uuidv4 } from 'uuid';
 import { storage, db } from "@/utils/firebase";
