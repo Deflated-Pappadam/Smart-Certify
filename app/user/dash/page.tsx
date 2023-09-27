@@ -38,7 +38,7 @@ export default function Component() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {/* <TableRow>
+            <TableRow>
               <TableCell>Sept 27</TableCell>
               <TableCell>WeWork</TableCell>
               <TableCell>
@@ -51,7 +51,7 @@ export default function Component() {
                   View
                 </button>
               </TableCell>
-            </TableRow> */}
+            </TableRow>
           </TableBody>
         </Table>
       </main>

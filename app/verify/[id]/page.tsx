@@ -75,7 +75,21 @@ function Verify({ params }: { params: { id: string } }) {
                         <img src={certImg} width={500} height={500}/>
 
                         </div>
-                    </div> : <div> <div className="text-[30px] md:text-[60px] text-black text-center">Fuck you bruh its fake</div></div>}
+                    </div> : <div><div className="flex md:flex-row flex-col w-full h-full p-10 justify-center items-center">
+                            <Image
+                                src="/verified.gif"
+                                width={70}
+                                height={70}
+                                alt="Picture of the author"
+                                className="p-2"
+                            />
+                            <div className="text-[30px] md:text-[60px] text-black text-center">Your Certificate is verified</div>
+                            
+                        </div>
+                        <div className="flex w-full justify-center">
+                        <img src={certImg} width={500} height={500}/>
+
+                        </div></div>}
             </div>}
         </div>
     )
