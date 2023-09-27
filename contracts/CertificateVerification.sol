@@ -2,10 +2,10 @@
 pragma solidity ^0.8.9;
 
 /**
- * @title Digital Locker
+ * @title CertificateVerification
  * @dev Store and retrieve Certificates
  */
-contract DigitalLocker {
+contract CertificateVerification {
     struct Certificate {
         address issuer;
         string recipientName;
