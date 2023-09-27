@@ -56,6 +56,15 @@ export default function Component() {
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
+  useEffect(() => {
+    const connectWallet = async () => {
+      const accounts= await window.ethereum.request({method: 'eth_requestAccounts'});
+      console.log(accounts)
+      }
+    connectWallet();
+  }, [])
+  
+
   async function generateCertificate() {
     setGenerating(true);
     const provider = new ethers.providers.Web3Provider(

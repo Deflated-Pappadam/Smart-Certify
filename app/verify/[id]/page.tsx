@@ -23,8 +23,18 @@ function Verify({ params }: { params: { id: string } }) {
     const router = useRouter()
 
     useEffect(() => {
+
         console.log(params.id);
+
+
       async function verifyCert() {
+
+        const connectWallet = async () => {
+            const accounts= await window.ethereum.request({method: 'eth_requestAccounts'});
+            console.log(accounts)
+            }
+
+        await connectWallet();
         setLoading(true);
         const provider = new ethers.providers.Web3Provider(
             window?.ethereum
