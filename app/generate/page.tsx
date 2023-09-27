@@ -79,7 +79,7 @@ export default function Component() {
     bg.onload = async () => {
       ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
       
-      const qrurl = await QRCode.toDataURL(`http://localhost:3000/verify/${id}`);
+      const qrurl = await QRCode.toDataURL(`https://sihhack.vercel.app/verify/${id}`);
       const qr = new Image();
       qr.src = qrurl;
       qr.setAttribute('crossorigin', 'anonymous');
