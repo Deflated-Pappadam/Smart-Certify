@@ -1,54 +1,104 @@
-import React from 'react'
+"use client"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { SelectValue, SelectTrigger, SelectLabel, SelectItem, SelectGroup, SelectContent, Select } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button"
+import { CardContent, Card } from "@/components/ui/card"
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { Calendar as CalendarIcon } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { format } from "date-fns"
+import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 
-function Issue() {
-    return (
-        <div className=''>
-            <div className='flex w-full h-full min-h-screen bg-slate-50 justify-between px-10'>
-                <div className='w-[45%] min-h-screen bg-black'></div>
-                <div className='flex md:flex-col w-[65%] min-h-screen  bg-slate-100 items-center justify-center'>
-                    <div className='flex w-full flex-col items-center justify-center p-10'>
-                        <div className='text-[60px] max-w-[70%] text-black font-semibold text-center '>Some random text for Issue form</div>
-                        <div className='text-[20px] max-w-[70%] text-black font-light text-center '>Some random text for Issue form with more stuff ig</div>
-                    </div>
-                    <div className="flex w-[80%] mx-auto items-center justify-between ">
-                        <div className='flex w-[45%] flex-col'>
-                            <div className="flex  text-[20px] text-black font-extralight justify-start my-2">Issuer Name</div>
-                            <input className='flex  p-3 rounded-lg' id='email' type='email' aria-label='email address' />
-                        </div>
-                        <div className='flex w-[45%] flex-col'>
-                            <div className="flex  text-[20px] text-black font-extralight justify-start my-2">Event Id</div>
-                            <input className='flex  p-3 rounded-lg' id='email' type='email' aria-label='email address' />
-                        </div>
-                    </div>
-                    <div className="flex w-[80%] mx-auto items-center justify-between ">
-                        <div className='flex w-[45%] flex-col'>
-                            <div className="flex  text-[20px] text-black font-extralight justify-start my-2">Recipient Name</div>
-                            <input className='flex  p-3 rounded-lg' id='email' type='email' aria-label='email address' />
-                        </div>
-                        <div className='flex w-[45%] flex-col'>
-                            <div className="flex  text-[20px] text-black font-extralight justify-start my-2">Adhaar Number</div>
-                            <input className='flex  p-3 rounded-lg' id='email' type='email' aria-label='email address' />
-                        </div>
-                    </div>
-                    <div className="flex w-[80%] mx-auto items-center justify-between ">
-                        <div className='flex w-[45%] flex-col'>
-                            <div className="flex  text-[20px] text-black font-extralight justify-start my-2">Event Name</div>
-                            <input className='flex  p-3 rounded-lg' id='email' type='email' aria-label='email address' />
-                        </div>
-                        <div className='flex w-[45%] flex-col'>
-                            <div className="flex  text-[20px] text-black font-extralight justify-start my-2">Date of Isuue</div>
-                            <input className='flex  p-3 rounded-lg' id='email' type='email' aria-label='email address' />
-                        </div>
-                    </div>
-                    <div className="flex w-[80%] mx-auto items-center justify-between py-5">
-                        <div className="w-[45%] rounded-md bg-orange-600 p-3 text-white text-[20px] font-light text-center hover:bg-orange-700 hover:cursor-pointer">Connect Wallet</div>
-                        <button className="w-[45%] rounded-md bg-black p-3 text-white text-[20px] font-light text-center hover:bg-slate-900 hover:cursor-pointer" disabled>Issue</button>
-                    </div>
-                    <div className='text-black'>smthn</div>
-                </div>
+export default function Component() {
+  const [date, setDate] = useState<Date>()
+  const [orgName, setOrgname] = useState<string>("");
+  const [eventName, setEventname] = useState<string>("");
+  const [recipientName, setRecipientName] = useState<string>("");
+  const [aadhaarId, setAadhaarId] = useState<string>("");
+
+  return (
+    <div className="flex items-center justify-center h-screen bg-black ">
+
+      <Card>
+        <CardContent>
+          <div className="space-y-8 p-10">
+            <div className="space-y-2">
+              <h2 className="text-3xl font-semibold">Issue Cerificates</h2>
+              <p className="text-zinc-500 dark:text-zinc-400">
+                Blah Blah blahdhjgf sjhgf
+              </p>
             </div>
-        </div>
-    )
-}
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="org-name">Organisation Name</Label>
+                  <Input id="org-name" placeholder="Enter the organistation name" value={orgName} onChange={(e: FormEvent<HTMLInputElement>) => {
+                    e.preventDefault();
+                    setOrgname(e.currentTarget.value);
+                    }} type="text"/>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="event-name">Event Name</Label>
+                  <Input id="event-name" placeholder="Enter event name" value={eventName} onChange={(e: FormEvent<HTMLInputElement>) => {
+                    e.preventDefault();
+                    setEventname(e.currentTarget.value);
+                    }} />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="name">Name</Label>
+                <Input id="name" placeholder="Enter the recipient name" type="text" value={recipientName} onChange={(e: FormEvent<HTMLInputElement>) => {
+                    e.preventDefault();
+                    setRecipientName(e.currentTarget.value);
+                    }}/>
+              </div>
+              <div className="space-y-2">
+                <Label>Aadhar id</Label>
+                <Input id="aadhar" placeholder="Enter the aadhar id" type="text" value={aadhaarId} onChange={(e: FormEvent<HTMLInputElement>) => {
+                    e.preventDefault();
+                    setAadhaarId(e.currentTarget.value);
+                    }}/>
+              </div>
+              <div className="flex flex-col space-y-2">
+                <Label>Issue Date</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-[280px] justify-start text-left font-normal",
+                        !date && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {date ? format(date, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={date}
+                      onSelect={setDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <Button className="bg-gray-800 text-white" type="submit" >
+                Generate Certificate
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
-export default Issue;
+    </div>
+  )
+}

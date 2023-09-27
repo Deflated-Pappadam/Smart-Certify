@@ -1,8 +1,17 @@
+"use client"
 import Image from 'next/image'
+import { Canvas } from '@/utils/getCertificate'
 
 export default function Home() {
+  const certDetails = {
+    name: "RIYANNA MARIA ABISON",
+    event: "SWAYAM",
+    type: "WEB DEVELOPMENT",
+    qrLink: "https://cdn.discordapp.com/attachments/946819313342500914/1156447200839204935/of_participation.png?ex=651500e2&is=6513af62&hm=dd10af8d521374fe8f5a8e7cf4a13f35dc40ac5df17fecfd6d0be02966d7e334&"
+  }
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      {Canvas(certDetails)};
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
           Get started by editing&nbsp;
