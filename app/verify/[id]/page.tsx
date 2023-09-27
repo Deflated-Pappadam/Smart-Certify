@@ -2,7 +2,7 @@
 import Loading from "@/components/Loading";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
-import CertificateVerification from "../../../src/artifacts/contracts/CertificateVerification.sol/CertificateVerification.json";
+import CertificateVerification from "@/src/artifacts/contracts/CertificateVerification.sol/CertificateVerification.json";
 
 import { useRouter } from 'next/navigation'
 import {
