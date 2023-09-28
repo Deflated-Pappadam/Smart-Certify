@@ -63,17 +63,7 @@ export default function Component() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    const connectWallet = async () => {
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      setAccounts(accounts);
-      console.log(accounts);
-    }
-    connectWallet();
     if (window.ethereum == null) {
-      toast({
-        title: "MetaMask Not Install",
-        description: "Please Install Metamask to continue",
-      })
       console.log("MetaMask not installed");
     } else {
       window.ethereum.request({ method: "eth_requestAccounts" }).then(async (accounts: string[]) => {
