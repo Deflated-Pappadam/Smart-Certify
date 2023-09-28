@@ -9,49 +9,48 @@ function Verify({ params }: { params: { id: string } }) {
     const [verified, setVerified] = useState(false);
     const [loading, setLoading] = useState(true);
     const [certImg, setCertImg] = useState("");
+    const [provider, setProvider] = useState<ethers.Provider | null>(null);
+    const [wallet, setWallet] = useState<string>("");
+
     const contractAddress = "0x13689bC9Ca59811178330cD3f5dB9a831706472e";
-    let provider = null;
 
     useEffect(() => {
-      async function verifyCert() {
-        if (window.ethereum == null) {
+        async function verifyCert() {
+            if (window.ethereum == null) {
+                console.log("MetaMask not installed");
+                setProvider(new ethers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/${process.env.INFURA_API_KEY}`));
+            } else {
+                window.ethereum.request({ method: "eth_requestAccounts" }).then(async (accounts: string[]) => {
+                    setWallet(accounts[0]);
+                    setProvider(new ethers.BrowserProvider(window.ethereum));
+                });
+            }
+            setLoading(true);
 
-            // If MetaMask is not installed, we use the default provider,
-            // which is backed by a variety of third-party services (such
-            // as INFURA). They do not have private keys installed so are
-            // only have read-only access
-            console.log("MetaMask not installed; using read-only defaults")
-            provider = new ethers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/${process.env.INFURA_API_KEY}`);
-        } else {
-            provider = new ethers.BrowserProvider(window.ethereum)
-        }
-        setLoading(true);
-        
-        const contract = new ethers.Contract(
-            contractAddress,
-            CertificateVerification.abi,
-            provider
-        );
+            const contract = new ethers.Contract(
+                contractAddress,
+                CertificateVerification.abi,
+                provider
+            );
 
-        try {            
-            const response = await contract.getCertificate(params.id);
-            console.log("response:", response);
-            setCertImg(response.imgHash);
-            setLoading(false);
-            setVerified(true);
-            console.log("verified");
-        } catch (error) {
-            setLoading(false);
-            setVerified(false);
+            try {
+                const response = await contract.getCertificate(params.id);
+                console.log("response:", response);
+                setCertImg(response.imgHash);
+                setLoading(false);
+                setVerified(true);
+                console.log("verified");
+            } catch (error) {
+                setLoading(false);
+                setVerified(false);
+            }
+            return () => {
+                setLoading(false);
+                setVerified(false);
+            }
         }
-        return () => {
-            setLoading(false);
-            setVerified(false);
-        }
-      }
-      verifyCert();
+        verifyCert();
     }, [])
-    
 
     return (
 
@@ -68,10 +67,10 @@ function Verify({ params }: { params: { id: string } }) {
                                 className="p-2"
                             />
                             <div className="text-[30px] md:text-[60px] text-black text-center">Your Certificate is verified</div>
-                            
+
                         </div>
                         <div className="flex w-full justify-center">
-                        <img src={certImg} width={500} height={500}/>
+                            <img src={certImg} width={500} height={500} />
 
                         </div>
                     </div> : <div>This Certificate is invalid</div>}
