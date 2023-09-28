@@ -4,7 +4,8 @@ import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import CertificateVerification from "@/artifacts/contracts/CertificateVerify.sol/CertificateVerification.json";
 import { ethers } from "ethers";
-
+import { toast, ToastContainer, ToastOptions } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function Verify({ params }: { params: { id: string } }) {
     const [verified, setVerified] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -13,47 +14,47 @@ function Verify({ params }: { params: { id: string } }) {
     let provider = null;
 
     useEffect(() => {
-      async function verifyCert() {
-        if (window.ethereum == null) {
+        async function verifyCert() {
+            if (window.ethereum == null) {
 
-            // If MetaMask is not installed, we use the default provider,
-            // which is backed by a variety of third-party services (such
-            // as INFURA). They do not have private keys installed so are
-            // only have read-only access
+                // If MetaMask is not installed, we use the default provider,
+                // which is backed by a variety of third-party services (such
+                // as INFURA). They do not have private keys installed so are
+                // only have read-only access
 
-            console.log("MetaMask not installed; using read-only defaults")
-            provider = new ethers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/${process.env.INFURA_API_KEY}`);
-            
-        } else {
-            provider = new ethers.BrowserProvider(window.ethereum)
-        }
-        setLoading(true);
-        
-        const contract = new ethers.Contract(
-            contractAddress,
-            CertificateVerification.abi,
-            provider
-        );
+                console.log("MetaMask not installed; using read-only defaults")
+                provider = new ethers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/${process.env.INFURA_API_KEY}`);
 
-        try {            
-            const response = await contract.getCertificate(params.id);
-            console.log("response:", response);
-            setCertImg(response.imgHash);
-            setLoading(false);
-            setVerified(true);
-            console.log("verified");
-        } catch (error) {
-            setLoading(false);
-            setVerified(false);
+            } else {
+                provider = new ethers.BrowserProvider(window.ethereum)
+            }
+            setLoading(true);
+
+            const contract = new ethers.Contract(
+                contractAddress,
+                CertificateVerification.abi,
+                provider
+            );
+
+            try {
+                const response = await contract.getCertificate(params.id);
+                console.log("response:", response);
+                setCertImg(response.imgHash);
+                setLoading(false);
+                setVerified(true);
+                console.log("verified");
+            } catch (error) {
+                setLoading(false);
+                setVerified(false);
+            }
+            return () => {
+                setLoading(false);
+                setVerified(false);
+            }
         }
-        return () => {
-            setLoading(false);
-            setVerified(false);
-        }
-      }
-      verifyCert();
+        verifyCert();
     }, [])
-    
+
 
     return (
 
@@ -70,13 +71,18 @@ function Verify({ params }: { params: { id: string } }) {
                                 className="p-2"
                             />
                             <div className="text-[30px] md:text-[60px] text-black text-center">Your Certificate is verified</div>
-                            
-                        </div>
-                        <div className="flex w-full justify-center">
-                        <img src={certImg} width={500} height={500}/>
 
                         </div>
-                    </div> : <div>This Certificate is invalid</div>}
+                        <div className="flex w-full justify-center">
+                            <img src={certImg} width={500} height={500} />
+
+                        </div>
+                    </div> : <div>
+                        <div className="flex md:flex-row flex-col w-full h-full p-10 justify-center items-center">
+                            <div className="text-[30px] md:text-[60px] text-black font-semibold text-center">Sorry , Your Certificate is Invalid 😥</div>
+                        </div>
+                        
+                    </div>}
             </div>}
         </div>
     )

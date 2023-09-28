@@ -31,10 +31,9 @@ import { storage, db } from "@/utils/firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { addDoc, collection } from "firebase/firestore"
 import { Separator } from "@/components/ui/separator"
-import { ToastAction } from "@/components/ui/toast"
-import { useToast } from "@/components/ui/use-toast"
-
-
+import { toast, ToastContainer, ToastOptions } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { type } from "os"
 
 declare global {
   interface Window {
@@ -59,39 +58,39 @@ export default function Component() {
   const [accounts, setAccounts] = useState<null | any>(null);
   let provider = null;
   let signer = null;
-  const { toast } = useToast()
+
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
     
+    const connectWallet = async () => {
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      setAccounts(accounts);
+      console.log(accounts);
+    }
+    
     if (window.ethereum == null) {
-      toast({
-        title: "MetaMask Not Install",
-        description: "Please Install Metamask to continue",
-      })
+      {
+        toast.error("MetaMask Not Installed",{theme: "dark"},);
+      }
       console.log("MetaMask not installed");
 
-  } else {
+    } else {
       // Connect to the MetaMask EIP-1193 object. This is a standard
       // protocol that allows Ethers access to make all read-only
       // requests through MetaMask.
-
-      const connectWallet = async () => {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        setAccounts(accounts);
-        console.log(accounts);
-      }
       connectWallet();
-    
+      
+
       provider = new ethers.BrowserProvider(window.ethereum)
-  
+
       // It also provides an opportunity to request access to write
       // operations, which will be performed by the private key
       // that MetaMask manages for the user.
       signer = provider.getSigner();
-  }
+    }
   }, [])
-  
+
   async function generateCertificate() {
     setGenerating(true);
     setOpen(false);
@@ -149,7 +148,7 @@ export default function Component() {
 
           try {
             const response = await contract.issueCertificate(id, recipientName, aadhaarId, imageURL, BigInt(date?.getMilliseconds()!));
-            await response.wait();   
+            await response.wait();
             console.log("response:", response);
             setOpen(true);
             setGenerating(false);
@@ -270,6 +269,8 @@ export default function Component() {
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
+
+              
             </div>
           </div>
         </CardContent>
