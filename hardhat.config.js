@@ -8,7 +8,8 @@ module.exports = {
     },
     polygon_mumbai: {
       url: "https://rpc-mumbai.maticvigil.com",
-      accounts: [process.env.METAMASK_ACCOUNT_PRIVATE_KEY]
+      accounts: ["2fe8d0c558c35aa9859f5be35ec2ed7fb6db404e64349c490ea64e5628d06e08"]
+    
     }
   },
   paths: {

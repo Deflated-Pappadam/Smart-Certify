@@ -12,7 +12,7 @@ function Verify({ params }: { params: { id: string } }) {
     const [provider, setProvider] = useState<ethers.Provider | null>(null);
     const [wallet, setWallet] = useState<string>("");
 
-    const contractAddress = "0x13689bC9Ca59811178330cD3f5dB9a831706472e";
+    const contractAddress = "0xEFB8357E5A292c195a20119C784EaeF0e2d6Afe8";
 
     useEffect(() => {
         async function verifyCert() {

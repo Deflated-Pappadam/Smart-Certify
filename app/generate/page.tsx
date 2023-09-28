@@ -31,13 +31,17 @@ import { storage, db } from "@/utils/firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { addDoc, collection } from "firebase/firestore"
 import { Separator } from "@/components/ui/separator"
+import { ToastAction } from "@/components/ui/toast"
+import { useToast } from "@/components/ui/use-toast"
+
+
 
 declare global {
   interface Window {
     ethereum?: any
   }
 }
-const contractAddress = "0x13689bC9Ca59811178330cD3f5dB9a831706472e";
+const contractAddress = "0xEFB8357E5A292c195a20119C784EaeF0e2d6Afe8";
 var pdf = new jsPDF("l", "pt", "a4");
 function Download() {
   pdf.save("certificate.pdf");
@@ -59,7 +63,17 @@ export default function Component() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
+    const connectWallet = async () => {
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      setAccounts(accounts);
+      console.log(accounts);
+    }
+    connectWallet();
     if (window.ethereum == null) {
+      toast({
+        title: "MetaMask Not Install",
+        description: "Please Install Metamask to continue",
+      })
       console.log("MetaMask not installed");
     } else {
       window.ethereum.request({ method: "eth_requestAccounts" }).then(async (accounts: string[]) => {
@@ -132,6 +146,8 @@ export default function Component() {
             setOpen(true);
             setGenerating(false);
           } catch (error) {
+            //  Transcation failed....
+
             setOpen(false);
             setGenerating(false);
           }
