@@ -47,7 +47,7 @@ contract CertificateVerification {
      * @notice Whitelisted wallets can issue certificate
      */
     function issueCertificate(string memory _id, string memory _recipientName, string memory _recipientAadhaar, string memory _imgHash, uint256 _issueDate) public  {
-        require(whitelist[msg.sender], "NOT_IN_WHITELIST");
+       /** require(whitelist[msg.sender], "NOT_IN_WHITELIST"); **/
         require(certificates[_id].creationDate == 0, "ALREADY_EXISTS");
         Certificate memory newCertificate = Certificate({
             issuer: msg.sender,

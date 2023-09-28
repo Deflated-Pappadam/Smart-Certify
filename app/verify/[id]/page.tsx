@@ -9,7 +9,7 @@ function Verify({ params }: { params: { id: string } }) {
     const [verified, setVerified] = useState(false);
     const [loading, setLoading] = useState(true);
     const [certImg, setCertImg] = useState("");
-    const contractAddress = "0x13689bC9Ca59811178330cD3f5dB9a831706472e";
+    const contractAddress = "0xEFB8357E5A292c195a20119C784EaeF0e2d6Afe8";
     let provider = null;
 
     useEffect(() => {
@@ -20,8 +20,10 @@ function Verify({ params }: { params: { id: string } }) {
             // which is backed by a variety of third-party services (such
             // as INFURA). They do not have private keys installed so are
             // only have read-only access
+
             console.log("MetaMask not installed; using read-only defaults")
             provider = new ethers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/${process.env.INFURA_API_KEY}`);
+            
         } else {
             provider = new ethers.BrowserProvider(window.ethereum)
         }

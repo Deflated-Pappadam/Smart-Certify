@@ -31,13 +31,17 @@ import { storage, db } from "@/utils/firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { addDoc, collection } from "firebase/firestore"
 import { Separator } from "@/components/ui/separator"
+import { ToastAction } from "@/components/ui/toast"
+import { useToast } from "@/components/ui/use-toast"
+
+
 
 declare global {
   interface Window {
     ethereum?: any
   }
 }
-const contractAddress = "0x13689bC9Ca59811178330cD3f5dB9a831706472e";
+const contractAddress = "0xEFB8357E5A292c195a20119C784EaeF0e2d6Afe8";
 var pdf = new jsPDF("l", "pt", "a4");
 function Download() {
   pdf.save("certificate.pdf");
@@ -55,22 +59,30 @@ export default function Component() {
   const [accounts, setAccounts] = useState<null | any>(null);
   let provider = null;
   let signer = null;
-
+  const { toast } = useToast()
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    const connectWallet = async () => {
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      setAccounts(accounts);
-      console.log(accounts);
-    }
-    connectWallet();
+    
     if (window.ethereum == null) {
+      toast({
+        title: "MetaMask Not Install",
+        description: "Please Install Metamask to continue",
+      })
       console.log("MetaMask not installed");
+
   } else {
       // Connect to the MetaMask EIP-1193 object. This is a standard
       // protocol that allows Ethers access to make all read-only
       // requests through MetaMask.
+
+      const connectWallet = async () => {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        setAccounts(accounts);
+        console.log(accounts);
+      }
+      connectWallet();
+    
       provider = new ethers.BrowserProvider(window.ethereum)
   
       // It also provides an opportunity to request access to write
@@ -79,8 +91,7 @@ export default function Component() {
       signer = provider.getSigner();
   }
   }, [])
-
-
+  
   async function generateCertificate() {
     setGenerating(true);
     setOpen(false);
@@ -143,6 +154,8 @@ export default function Component() {
             setOpen(true);
             setGenerating(false);
           } catch (error) {
+            //  Transcation failed....
+
             setOpen(false);
             setGenerating(false);
           }
