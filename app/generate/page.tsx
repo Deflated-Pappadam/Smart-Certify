@@ -28,7 +28,7 @@ import CertificateVerification from "@/artifacts/contracts/CertificateVerify.sol
 import { ethers } from "ethers"
 import { v4 as uuidv4 } from 'uuid';
 import { storage, db } from "@/utils/firebase";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
+import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { addDoc, collection } from "firebase/firestore"
 import { Separator } from "@/components/ui/separator"
 import { toast, ToastContainer, ToastOptions } from 'react-toastify';
@@ -64,7 +64,7 @@ export default function Component() {
   useEffect(() => {
     if (window.ethereum == null) {
       {
-        toast.error("MetaMask Not Installed",{theme: "dark"},);
+        toast.error("MetaMask Not Installed", { theme: "dark", toastId: "meta-not-installed" },);
       }
       console.log("MetaMask not installed");
     } else {
@@ -99,7 +99,6 @@ export default function Component() {
       bg.src = "https://cdn.discordapp.com/attachments/946819313342500914/1156447200839204935/of_participation.png?ex=651500e2&is=6513af62&hm=dd10af8d521374fe8f5a8e7cf4a13f35dc40ac5df17fecfd6d0be02966d7e334&";
       bg.onload = async () => {
         ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
-
         const qrurl = await QRCode.toDataURL(`https://sihhack.vercel.app/verify/${id}`);
         const qr = new Image();
         qr.src = qrurl;
@@ -125,21 +124,24 @@ export default function Component() {
           // Upload the Blob to Firebase Storage
           await uploadBytes(storageRef, blob);
           const imageURL = await getDownloadURL(storageRef);
-          const docRef = await addDoc(collection(db, 'certificates'), {
-            issuerName: { orgName },
-            imgLink: { imageURL },
-            eventName: { eventName }
-          })
-
+          console.log(imageURL);
+          
           try {
             const response = await contract.issueCertificate(id, recipientName, aadhaarId, imageURL, BigInt(date?.getMilliseconds()!));
             await response.wait();
             console.log("response:", response);
+            const docRef = await addDoc(collection(db, 'certificates'), {
+              issuerName: { orgName },
+              imgLink: { imageURL },
+              eventName: { eventName }
+            })
             setOpen(true);
             setGenerating(false);
           } catch (error) {
             //  Transcation failed....
-
+            deleteObject(storageRef)
+              .then(() => console.log("deleted File from firebase due to transaction failure!"))
+              .catch((error) => console.log("error deleting image from firebase"));
             setOpen(false);
             setGenerating(false);
           }
@@ -255,7 +257,7 @@ export default function Component() {
                 </DialogContent>
               </Dialog>
 
-              
+
             </div>
           </div>
         </CardContent>
