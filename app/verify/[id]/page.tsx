@@ -10,23 +10,21 @@ function Verify({ params }: { params: { id: string } }) {
     const [verified, setVerified] = useState(false);
     const [loading, setLoading] = useState(true);
     const [certImg, setCertImg] = useState("");
+    const [provider, setProvider] = useState<ethers.Provider | null>(null);
+    const [wallet, setWallet] = useState<string>("");
+
     const contractAddress = "0xEFB8357E5A292c195a20119C784EaeF0e2d6Afe8";
-    let provider = null;
 
     useEffect(() => {
         async function verifyCert() {
             if (window.ethereum == null) {
-
-                // If MetaMask is not installed, we use the default provider,
-                // which is backed by a variety of third-party services (such
-                // as INFURA). They do not have private keys installed so are
-                // only have read-only access
-
-                console.log("MetaMask not installed; using read-only defaults")
-                provider = new ethers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/${process.env.INFURA_API_KEY}`);
-
+                console.log("MetaMask not installed");
+                setProvider(new ethers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/${process.env.INFURA_API_KEY}`));
             } else {
-                provider = new ethers.BrowserProvider(window.ethereum)
+                window.ethereum.request({ method: "eth_requestAccounts" }).then(async (accounts: string[]) => {
+                    setWallet(accounts[0]);
+                    setProvider(new ethers.BrowserProvider(window.ethereum));
+                });
             }
             setLoading(true);
 
@@ -55,7 +53,6 @@ function Verify({ params }: { params: { id: string } }) {
         verifyCert();
     }, [])
 
-
     return (
 
         <div className='w-full min-h-screen bg-white text-black'>
@@ -71,6 +68,10 @@ function Verify({ params }: { params: { id: string } }) {
                                 className="p-2"
                             />
                             <div className="text-[30px] md:text-[60px] text-black text-center">Your Certificate is verified</div>
+
+                        </div>
+                        <div className="flex w-full justify-center">
+                            <img src={certImg} width={500} height={500} />
 
                         </div>
                         <div className="flex w-full justify-center">

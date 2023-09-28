@@ -55,39 +55,21 @@ export default function Component() {
   const [certificateImage, setCertificateImage] = useState<string>("");
   const [generating, setGenerating] = useState(false);
   const [open, setOpen] = useState(false);
-  const [accounts, setAccounts] = useState<null | any>(null);
-  let provider = null;
-  let signer = null;
+  const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
+  const [signer, setSigner] = useState<ethers.JsonRpcSigner | null>(null);
+  const [wallet, setWallet] = useState<string>("");
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    
-    const connectWallet = async () => {
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      setAccounts(accounts);
-      console.log(accounts);
-    }
-    
     if (window.ethereum == null) {
-      {
-        toast.error("MetaMask Not Installed",{theme: "dark"},);
-      }
       console.log("MetaMask not installed");
-
     } else {
-      // Connect to the MetaMask EIP-1193 object. This is a standard
-      // protocol that allows Ethers access to make all read-only
-      // requests through MetaMask.
-      connectWallet();
-      
-
-      provider = new ethers.BrowserProvider(window.ethereum)
-
-      // It also provides an opportunity to request access to write
-      // operations, which will be performed by the private key
-      // that MetaMask manages for the user.
-      signer = provider.getSigner();
+      window.ethereum.request({ method: "eth_requestAccounts" }).then(async (accounts: string[]) => {
+        setWallet(accounts[0]);
+        setProvider(new ethers.BrowserProvider(window.ethereum));
+        if (provider) setSigner(await provider.getSigner());
+      });
     }
   }, [])
 
