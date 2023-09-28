@@ -1,9 +1,6 @@
 "use client"
-import { Button } from "@/components/ui/button"
 import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table} from "@/components/ui/table"
 import { Card, CardHeader } from "@/components/ui/card"
-import { PopoverTrigger, PopoverContent, Popover } from "@/components/ui/popover"
-import Image from "next/image"
 import { db } from "@/utils/firebase"
 import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react"
