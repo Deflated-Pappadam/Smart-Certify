@@ -78,9 +78,9 @@ function Verify({ params }: { params: { id: string } }) {
                             <img src={certImg} width={500} height={500} />
 
                         </div>
-                    </div> : <div>
-                        <div className="flex md:flex-row flex-col w-full h-full p-10 justify-center items-center">
-                            <div className="text-[30px] md:text-[60px] text-black font-semibold text-center">Sorry , Your Certificate is Invalid 😥</div>
+                    </div> : <div className="w-full min-h-screen">
+                        <div className="flex md:flex-row flex-col w-[70%] h-full p-10 justify-center items-center mx-auto">
+                            <div className="w-full text-[30px] md:text-[90px] text-black font-semibold text-center">Sorry , Your Certificate is Invalid 😥</div>
                         </div>
                         
                     </div>}

@@ -63,6 +63,9 @@ export default function Component() {
 
   useEffect(() => {
     if (window.ethereum == null) {
+      {
+        toast.error("MetaMask Not Installed",{theme: "dark"},);
+      }
       console.log("MetaMask not installed");
     } else {
       window.ethereum.request({ method: "eth_requestAccounts" }).then(async (accounts: string[]) => {
