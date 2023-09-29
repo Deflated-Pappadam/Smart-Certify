@@ -1,15 +1,15 @@
 "use client";
-import {
-  TableHead,
-  TableRow,
-  TableHeader,
-  TableCell,
-  TableBody,
-  Table,
-} from "@/components/ui/table";
 import { Card, CardHeader } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { db } from "@/utils/firebase";
-import { DocumentData, collection, getDocs, onSnapshot } from "firebase/firestore";
+import { DocumentData, collection, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 export default function Component() {

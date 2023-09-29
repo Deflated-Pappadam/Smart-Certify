@@ -1,10 +1,9 @@
 "use client";
-import Loading from "@/components/Loading";
-import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
 import CertificateVerification from "@/artifacts/contracts/CertificateVerify.sol/CertificateVerification.json";
+import Loading from "@/components/Loading";
 import { ethers } from "ethers";
-import { toast, ToastContainer, ToastOptions } from 'react-toastify';
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import 'react-toastify/dist/ReactToastify.css';
 function Verify({ params }: { params: { id: string } }) {
     const [verified, setVerified] = useState(false);
