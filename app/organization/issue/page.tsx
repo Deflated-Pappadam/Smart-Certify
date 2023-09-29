@@ -122,7 +122,7 @@ export default function Component() {
             ctx.imageSmoothingQuality = 'high';
             const bg = new Image();
             bg.setAttribute('crossorigin', 'anonymous');
-            bg.src = "https://cdn.discordapp.com/attachments/946819313342500914/1156447200839204935/of_participation.png?ex=651500e2&is=6513af62&hm=dd10af8d521374fe8f5a8e7cf4a13f35dc40ac5df17fecfd6d0be02966d7e334&";
+            bg.src = "https://cdn.discordapp.com/attachments/946819313342500914/1157381635214413834/of_participation.png?ex=65186724&is=651715a4&hm=c775ce17a5caff93d620f1cf9a5137775b0e8ce7ce877a1ea79bc0a07c2a6e53&";
             bg.onload = async () => {
                 ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
                 const qrurl = await QRCode.toDataURL(`https://sihhack.vercel.app/verify/${id}`, { color: { dark: "#ffc000", light: "#00000000" }, width: 100 * 2 });
@@ -135,9 +135,10 @@ export default function Component() {
                     ctx.textAlign = "center";
                     ctx.fillText(recipientName, canvas.width / 2, canvas.height / 2 - 15 * 2);
                     ctx.font = "34px Comic Sans MS";
-                    ctx.fillText("has successfully completed a training", canvas.width / 2, canvas.height / 2 + 40 * 2)
-                    ctx.fillText(`programme on ${eventName.toUpperCase()}`, canvas.width / 2, canvas.height / 2 + 65 * 2)
-                    ctx.fillText(`conducted by ${orgName.toUpperCase()}`, canvas.width / 2, canvas.height / 2 + 90 * 2)
+                    ctx.fillText("has successfully completed a training", canvas.width / 2, canvas.height / 2 + 50 * 2)
+                    ctx.fillText(`programme on ${eventName.toUpperCase()}`, canvas.width / 2, canvas.height / 2 + 75 * 2)
+                    ctx.fillText(`conducted by ${orgName.toUpperCase()}`, canvas.width / 2 , canvas.height / 2 + 100 * 2)
+                    ctx.fillText(date?.toString() ? date?.toString().split(" ").splice(1,3).join(" ") : "", canvas.width/2+20,canvas.height-80)
                     var imgData = canvas.toDataURL("image/jpeg", 1.0);
                     const blob = dataURItoBlob(imgData);
                     setCertificateImage(imgData);
