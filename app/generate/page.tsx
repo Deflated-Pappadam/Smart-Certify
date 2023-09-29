@@ -47,6 +47,7 @@ function Download() {
 
 }
 export default function Component() {
+  const [metaMask,setMetaMask]=useState(true);
   const [date, setDate] = useState<Date>()
   const [orgName, setOrgname] = useState<string>("");
   const [eventName, setEventname] = useState<string>("");
@@ -63,11 +64,15 @@ export default function Component() {
 
   useEffect(() => {
     if (window.ethereum == null) {
+      setMetaMask(false);
+
       {
         toast.error("MetaMask Not Installed", { theme: "dark", toastId: "meta-not-installed" },);
       }
       console.log("MetaMask not installed");
+
     } else {
+      setMetaMask(true);
       window.ethereum.request({ method: "eth_requestAccounts" }).then(async (accounts: string[]) => {
         setWallet(accounts[0]);
         setProvider(new ethers.BrowserProvider(window.ethereum));
@@ -138,6 +143,9 @@ export default function Component() {
             setOpen(true);
             setGenerating(false);
           } catch (error) {
+            {
+              toast.error(`Error : User rejected Transaction`, { theme: "dark", toastId: "munknown-eror" },);
+            }
             //  Transcation failed....
             deleteObject(storageRef)
               .then(() => console.log("deleted File from firebase due to transaction failure!"))
@@ -148,6 +156,9 @@ export default function Component() {
         };
       }
     } catch (error) {
+      {
+        toast.error(`Unknown Error ${error}`, { theme: "dark", toastId: "munknown-eror" },);
+      }
       setGenerating(false);
       setOpen(false);
     }
@@ -172,7 +183,7 @@ export default function Component() {
   return (
     <div className="flex items-center justify-center h-screen bg-black ">
       <canvas hidden ref={canvasRef}>  </canvas>;
-      <Card>
+      {metaMask?<Card>
         <CardContent>
           <div className="space-y-8 p-10">
             <div className="space-y-2">
@@ -261,7 +272,8 @@ export default function Component() {
             </div>
           </div>
         </CardContent>
-      </Card>
+      </Card>:<div className="flex w-full h-full justify-center items-center ">
+        <div className="text-[90px] text-center text-white"> Install MetaMask !!</div></div>}
 
     </div>
   )
