@@ -29,7 +29,7 @@ import { ethers } from "ethers"
 import { v4 as uuidv4 } from 'uuid';
 import { storage, db } from "@/utils/firebase";
 import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage"
-import { addDoc, collection } from "firebase/firestore"
+import { addDoc, collection, serverTimestamp } from "firebase/firestore"
 import { Separator } from "@/components/ui/separator"
 import { toast, ToastContainer, ToastOptions } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -43,6 +43,7 @@ declare global {
 const contractAddress = "0xEFB8357E5A292c195a20119C784EaeF0e2d6Afe8";
 
 export default function Component() {
+  const [metaMask,setMetaMask]=useState(true);
   const [date, setDate] = useState<Date>()
   const [orgName, setOrgname] = useState<string>("");
   const [eventName, setEventname] = useState<string>("");
@@ -60,11 +61,15 @@ export default function Component() {
 
   useEffect(() => {
     if (window.ethereum == null) {
+      setMetaMask(false);
+
       {
         toast.error("MetaMask Not Installed", { theme: "dark", toastId: "meta-not-installed" },);
       }
       console.log("MetaMask not installed");
+
     } else {
+      setMetaMask(true);
       window.ethereum.request({ method: "eth_requestAccounts" }).then(async (accounts: string[]) => {
         setWallet(accounts[0]);
         setProvider(new ethers.BrowserProvider(window.ethereum));
@@ -258,13 +263,17 @@ export default function Component() {
             await response.wait();
             console.log("response:", response);
             const docRef = await addDoc(collection(db, 'certificates'), {
-              issuerName: { orgName },
-              imgLink: { imageURL },
-              eventName: { eventName }
+              issuerName: orgName,
+              imgLink: imageURL,
+              eventName: eventName,
+              issuedOn: serverTimestamp()
             })
             setOpen(true);
             setGenerating(false);
           } catch (error) {
+            {
+              toast.error(`Error : User rejected Transaction`, { theme: "dark", toastId: "munknown-eror" },);
+            }
             //  Transcation failed....
             deleteObject(storageRef)
               .then(() => console.log("deleted File from firebase due to transaction failure!"))
@@ -275,6 +284,9 @@ export default function Component() {
         };
       }
     } catch (error) {
+      {
+        toast.error(`Unknown Error ${error}`, { theme: "dark", toastId: "munknown-eror" },);
+      }
       setGenerating(false);
       setOpen(false);
     }
@@ -299,7 +311,7 @@ export default function Component() {
   return (
     <div className="flex items-center justify-center h-screen bg-black ">
       <canvas hidden ref={canvasRef}>  </canvas>;
-      <Card>
+      {metaMask?<Card>
         <CardContent>
           <div className="space-y-8 p-10">
             <div className="space-y-2">
@@ -388,7 +400,8 @@ export default function Component() {
             </div>
           </div>
         </CardContent>
-      </Card>
+      </Card>:<div className="flex w-full h-full justify-center items-center ">
+        <div className="text-[90px] text-center text-white"> Install MetaMask !!</div></div>}
 
     </div>
   )

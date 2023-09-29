@@ -54,7 +54,7 @@ function Verify({ params }: { params: { id: string } }) {
 
     return (
 
-        <div className='w-full min-h-screen bg-white text-black'>
+        <div className='flex items-center justify-center w-full min-h-screen bg-black text-white'>
             {loading ? <Loading /> : <div>
                 {verified ?
                     <div>
@@ -72,12 +72,8 @@ function Verify({ params }: { params: { id: string } }) {
                         <div className="flex w-full justify-center">
                             <Image alt="certificate-preview" src={certImg} width={500} height={500} />
                         </div>
-                    </div> : <div className="w-full min-h-screen">
-                        <div className="flex md:flex-row flex-col w-[70%] h-full p-10 justify-center items-center mx-auto">
-                            <div className="w-full text-[30px] md:text-[90px] text-black font-semibold text-center">Sorry , Your Certificate is Invalid 😥</div>
-                        </div>
-                        
-                    </div>}
+                    </div> : <div className="flex w-full h-full justify-center items-center  ">
+        <div className="md:text-[90px] text-[30px] text-center text-white"> Sorry, Your certificate is invalid!!</div></div>}
             </div>}
         </div>
     )
