@@ -1,20 +1,45 @@
-"use client"
-import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table} from "@/components/ui/table"
-import { Card, CardHeader } from "@/components/ui/card"
-import { db } from "@/utils/firebase"
-import { collection, getDocs } from "firebase/firestore";
-import { useEffect, useState } from "react"
-
+"use client";
+import {
+  TableHead,
+  TableRow,
+  TableHeader,
+  TableCell,
+  TableBody,
+  Table,
+} from "@/components/ui/table";
+import { Card, CardHeader } from "@/components/ui/card";
+import { db } from "@/utils/firebase";
+import { DocumentData, collection, getDocs, onSnapshot } from "firebase/firestore";
+import { useEffect, useState } from "react";
 
 export default function Component() {
-  const [allData, setAllData] = useState([]);
+  const [allData, setAllData] = useState<DocumentData[]>([]);
+
+  // useEffect(() => {
+  //   fetchAll();
+  // }, []);
+
+  // const fetchAll = async () => {
+  //   const data = await getDocs(collection(db, "certificates"));
+  //   setAllData(data.docs);
+  //   console.log(data);
+  // };
+
   useEffect(() => {
-    async () => {
-      const data = await getDocs(collection(db, "certificates"))
-      
-    }
-  })
-  
+    const unsub = onSnapshot(collection(db, "certificates"), (snapshot) => {
+      setAllData(
+        snapshot.docs.map((doc) => {
+          return doc.data();
+        })
+      );
+    });
+    return () => {
+      console.log(allData);
+      unsub();
+    };
+  }, []);
+
+
   return (
     <div>
       <main className="flex-grow p-6">
@@ -35,23 +60,26 @@ export default function Component() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>Sept 27</TableCell>
-              <TableCell>WeWork</TableCell>
-              <TableCell>
-                <span className="text-black-800 rounded-md">
-                  Office
-                </span>
-              </TableCell>
-              <TableCell className="text-right">
-                <button className="px-3 py-2 bg-blue-400 rounded-lg text-white">
-                  View
-                </button>
-              </TableCell>
-            </TableRow>
+            {allData.map((row) => {
+              console.log(row);
+              return (
+                <TableRow>
+                  <TableCell>Sept 27</TableCell>
+                  <TableCell>{row.issuerName}</TableCell>
+                  <TableCell>
+                    <span className="text-black-800 rounded-md">Office</span>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <button className="px-3 py-2 bg-blue-400 rounded-lg text-white">
+                      View
+                    </button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </main>
     </div>
-  )
+  );
 }

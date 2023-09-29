@@ -29,7 +29,7 @@ import { ethers } from "ethers"
 import { v4 as uuidv4 } from 'uuid';
 import { storage, db } from "@/utils/firebase";
 import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage"
-import { addDoc, collection } from "firebase/firestore"
+import { addDoc, collection, serverTimestamp } from "firebase/firestore"
 import { Separator } from "@/components/ui/separator"
 import { toast, ToastContainer, ToastOptions } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -136,9 +136,10 @@ export default function Component() {
             await response.wait();
             console.log("response:", response);
             const docRef = await addDoc(collection(db, 'certificates'), {
-              issuerName: { orgName },
-              imgLink: { imageURL },
-              eventName: { eventName }
+              issuerName: orgName,
+              imgLink: imageURL,
+              eventName: eventName,
+              issuedOn: serverTimestamp()
             })
             setOpen(true);
             setGenerating(false);
