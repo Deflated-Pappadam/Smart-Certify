@@ -9,21 +9,11 @@ import {
 } from "@/components/ui/table";
 import { Card, CardHeader } from "@/components/ui/card";
 import { db } from "@/utils/firebase";
-import { DocumentData, collection, getDocs, onSnapshot } from "firebase/firestore";
+import { DocumentData, collection, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 export default function Component() {
   const [allData, setAllData] = useState<DocumentData[]>([]);
-
-  // useEffect(() => {
-  //   fetchAll();
-  // }, []);
-
-  // const fetchAll = async () => {
-  //   const data = await getDocs(collection(db, "certificates"));
-  //   setAllData(data.docs);
-  //   console.log(data);
-  // };
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "certificates"), (snapshot) => {
@@ -64,15 +54,15 @@ export default function Component() {
               console.log(row);
               return (
                 <TableRow>
-                  <TableCell>Sept 27</TableCell>
+                  <TableCell>{new Date(row.issuedOn.seconds*1000).toString().split(" ").splice(0, 4).join(" ")}</TableCell>
                   <TableCell>{row.issuerName}</TableCell>
                   <TableCell>
-                    <span className="text-black-800 rounded-md">Office</span>
+                    <span className="text-black-800 rounded-md">{row.eventName}</span>
                   </TableCell>
                   <TableCell className="text-right">
-                    <button className="px-3 py-2 bg-blue-400 rounded-lg text-white">
+                    <a href={row.imgLink} target="blank" className="px-3 py-2 bg-blue-400 rounded-lg text-white">
                       View
-                    </button>
+                    </a>
                   </TableCell>
                 </TableRow>
               );
