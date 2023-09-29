@@ -33,7 +33,7 @@ import { addDoc, collection } from "firebase/firestore"
 import { Separator } from "@/components/ui/separator"
 import { toast, ToastContainer, ToastOptions } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { type } from "os"
+
 
 declare global {
   interface Window {
