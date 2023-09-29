@@ -22,7 +22,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import jsPDF from "jspdf"
+import { PDFDocument, PDFName, PDFObject, PDFObjectStream, PDFRawStream, PDFRef } from 'pdf-lib'
 import QRCode from 'qrcode'
 import CertificateVerification from "@/artifacts/contracts/CertificateVerify.sol/CertificateVerification.json";
 import { ethers } from "ethers"
@@ -33,7 +33,7 @@ import { addDoc, collection } from "firebase/firestore"
 import { Separator } from "@/components/ui/separator"
 import { toast, ToastContainer, ToastOptions } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { type } from "os"
+import { captureCanvasImage } from "@/utils/helper"
 
 declare global {
   interface Window {
@@ -41,11 +41,7 @@ declare global {
   }
 }
 const contractAddress = "0xEFB8357E5A292c195a20119C784EaeF0e2d6Afe8";
-var pdf = new jsPDF("l", "pt", "a4");
-function Download() {
-  pdf.save("certificate.pdf");
 
-}
 export default function Component() {
   const [date, setDate] = useState<Date>()
   const [orgName, setOrgname] = useState<string>("");
@@ -58,6 +54,7 @@ export default function Component() {
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
   const [signer, setSigner] = useState<ethers.JsonRpcSigner | null>(null);
   const [wallet, setWallet] = useState<string>("");
+  const [downloadURL, setDownloadURL] = useState<string>("");
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -76,6 +73,18 @@ export default function Component() {
     }
   }, [])
 
+  function Download() {
+    if (downloadURL.length > 0) {
+      const link = document.createElement('a');
+      link.href = downloadURL;
+      link.download = 'certificate.pdf'; // Specify the filename
+      link.click();
+
+      // Revoke the URL to free up resources
+      URL.revokeObjectURL(downloadURL);
+    }
+  } 
+
   async function generateCertificate() {
     setGenerating(true);
     setOpen(false);
@@ -91,34 +100,152 @@ export default function Component() {
 
       const id = uuidv4()
       const canvas: HTMLCanvasElement | null = canvasRef.current!;
-      canvas.width = 800;
-      canvas.height = 565.5;
+      canvas.width = 841.89 * 2;
+      canvas.height = 595.28 * 2;
       const ctx = canvas.getContext('2d')!;
+      ctx.imageSmoothingQuality = 'high';
       const bg = new Image();
       bg.setAttribute('crossorigin', 'anonymous');
       bg.src = "https://cdn.discordapp.com/attachments/946819313342500914/1156447200839204935/of_participation.png?ex=651500e2&is=6513af62&hm=dd10af8d521374fe8f5a8e7cf4a13f35dc40ac5df17fecfd6d0be02966d7e334&";
       bg.onload = async () => {
         ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
-        const qrurl = await QRCode.toDataURL(`https://sihhack.vercel.app/verify/${id}`);
+        const qrurl =  await QRCode.toDataURL(`https://sihhack.vercel.app/verify/${id}`, {color: {dark: "#ffc000", light: "#00000000"}, width: 100 * 2});
         const qr = new Image();
         qr.src = qrurl;
         qr.setAttribute('crossorigin', 'anonymous');
         qr.onload = async () => {
-          ctx.drawImage(qr, 82, 80, 60, 60);
-          ctx.font = "30px Comic Sans MS";
+          ctx.drawImage(qr, 78 * 2, 75 * 2, 80 * 2, 80 * 2);
+          ctx.font = "60px Comic Sans MS";
           ctx.textAlign = "center";
-          ctx.fillText(recipientName, canvas.width / 2, canvas.height / 2 - 15);
-          ctx.font = "17px Comic Sans MS";
-          ctx.fillText("has successfully completed a training", canvas.width / 2, canvas.height / 2 + 40)
-          ctx.fillText(`programme on ${eventName.toUpperCase()}`, canvas.width / 2, canvas.height / 2 + 65)
-          ctx.fillText(`conducted by ${orgName.toUpperCase()}`, canvas.width / 2, canvas.height / 2 + 90)
+          ctx.fillText(recipientName, canvas.width / 2, canvas.height / 2 - 15 * 2);
+          ctx.font = "34px Comic Sans MS";
+          ctx.fillText("has successfully completed a training", canvas.width / 2, canvas.height / 2 + 40 * 2)
+          ctx.fillText(`programme on ${eventName.toUpperCase()}`, canvas.width / 2, canvas.height / 2 + 65 * 2)
+          ctx.fillText(`conducted by ${orgName.toUpperCase()}`, canvas.width / 2, canvas.height / 2 + 90 * 2)
 
           var imgData = canvas.toDataURL("image/jpeg", 1.0);
 
           // Create a Blob from the data URL
           const blob = dataURItoBlob(imgData);
           setCertificateImage(imgData);
-          pdf.addImage(imgData, 'JPEG', 0, 0, 842, 595);
+          async function createPdfWithCanvasImage() {
+            // Create a new PDF document
+            const pdfDoc = await PDFDocument.create();
+          
+            // Add a new page to the document with A4 size in landscape orientation
+            const pageWidth = 841.89; // A4 width in points (landscape)
+            const pageHeight = 595.28; // A4 height in points (landscape)
+            const page = pdfDoc.addPage([pageWidth, pageHeight]);
+          
+            // Capture an image from an HTML canvas (replace 'canvasId' with your canvas element's ID)
+            const imageBytes = await captureCanvasImage(canvas!);
+          
+            // Embed the captured image on the page
+            const image = await pdfDoc.embedPng(imageBytes);
+            page.drawImage(image, {
+              x: 0,
+              y: 0,
+              width: pageWidth,
+              height: pageHeight,
+              opacity: 1, // Opacity (1 for fully opaque)
+            });
+
+            type MetaDataOptions = {
+              author: string;
+              title: string;
+              keywords: string[];
+              creatorTool: string;
+              documentCreationDate: Date;
+              documentModificationDate: Date;
+              metadataModificationDate: Date;
+              subject: string,
+              producer: string,
+            }
+            const customMetadataKey = 'BlockCertificateID';
+            const customMetadataValue = id;
+
+            const options: MetaDataOptions = {
+              author: "SmartCertify",
+              title: `${eventName.toUpperCase()}-${recipientName.replaceAll(" ", "_")}`,
+              keywords: ["certificate", "blockchain"],
+              creatorTool: "SmartCertify",
+              documentCreationDate: new Date(),
+              documentModificationDate: new Date(),
+              metadataModificationDate: new Date(),
+              subject: `Certificate to ${recipientName.toUpperCase()} for ${eventName.toUpperCase()} by ${orgName.toUpperCase()}`,
+              producer: orgName.toUpperCase(),
+            }
+
+            console.log(options);
+            
+            
+            const metadataXML = `
+            <?xpacket begin="" id="W5M0MpCehiHzreSzNTczkc9d"?>
+              <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 5.2-c001 63.139439, 2010/09/27-13:37:26        ">
+                <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        
+                  <rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                    <dc:format>application/pdf</dc:format>
+                    <dc:creator>
+                      <rdf:Seq>
+                        <rdf:li>${options.author}</rdf:li>
+                      </rdf:Seq>
+                    </dc:creator>
+                    <dc:title>
+                       <rdf:Alt>
+                          <rdf:li xml:lang="x-default">${options.title}</rdf:li>
+                       </rdf:Alt>
+                    </dc:title>
+                    <dc:subject>
+                      <rdf:Bag>
+                        ${options.keywords
+                          .map(keyword => `<rdf:li>${keyword}</rdf:li>`)
+                          .join('\n')}
+                      </rdf:Bag>
+                    </dc:subject>
+                  </rdf:Description>
+        
+                  <rdf:Description rdf:about="" xmlns:xmp="http://ns.adobe.com/xap/1.0/">
+                    <xmp:CreatorTool>${options.creatorTool}</xmp:CreatorTool>
+                    <xmp:CreateDate>${options.documentCreationDate.toISOString()}</xmp:CreateDate>
+                    <xmp:ModifyDate>${options.documentModificationDate.toISOString()}</xmp:ModifyDate>
+                    <xmp:MetadataDate>${options.metadataModificationDate.toISOString()}</xmp:MetadataDate>
+                  </rdf:Description>
+        
+                  <rdf:Description rdf:about="" xmlns:pdf="http://ns.adobe.com/pdf/1.3/">
+                    <pdf:Subject>${options.subject}</pdf:Subject>
+                    <pdf:Producer>${options.producer}</pdf:Producer>
+                  </rdf:Description>
+
+                  <rdf:Description rdf:about="" xmlns:${customMetadataKey}="${customMetadataValue}">
+                    <${customMetadataKey}:${customMetadataKey}>${customMetadataValue}</${customMetadataKey}:${customMetadataKey}>
+                  </rdf:Description>
+        
+                </rdf:RDF>
+              </x:xmpmeta>
+            <?xpacket end="w"?>
+          `.trim();
+
+            const metadataStream = pdfDoc.context.stream(metadataXML, {
+              Type: 'Metadata',
+              Subtype: 'XML',
+              Length: metadataXML.length,
+            });
+          
+            const metadataStreamRef = pdfDoc.context.register(metadataStream);
+            pdfDoc.catalog.set(PDFName.of('Metadata'), metadataStreamRef);
+            console.log("SET CUSTOM METADATA");
+            // Serialize the PDF document
+            const pdfBytes = await pdfDoc.save();
+            const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+            // Create a URL for the Blob
+            const url = URL.createObjectURL(blob);
+            setDownloadURL(url);
+            const pdfPath = '../../test.pdf';
+          }
+
+          await createPdfWithCanvasImage();
+          // pdf.addImage(imgData, 'JPEG', 0, 0, 842, 595);
           // Get a reference to the Firebase Storage bucket and specify the path
           const storageRef = ref(storage, `canvas-images/${id}.png`);
           // Upload the Blob to Firebase Storage

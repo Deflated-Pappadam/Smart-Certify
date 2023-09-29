@@ -21,13 +21,15 @@ function Verify({ params }: { params: { id: string } }) {
                 console.log("MetaMask not installed");
                 setProvider(new ethers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/${process.env.INFURA_API_KEY}`));
             } else {
-                window.ethereum.request({ method: "eth_requestAccounts" }).then(async (accounts: string[]) => {
-                    setWallet(accounts[0]);
-                    setProvider(new ethers.BrowserProvider(window.ethereum));
-                });
+                if (!provider) {
+                    window.ethereum.request({ method: "eth_requestAccounts" }).then(async (accounts: string[]) => {
+                        setWallet(accounts[0]);
+                        setProvider(new ethers.BrowserProvider(window.ethereum));
+                    });
+                }
             }
             setLoading(true);
-
+            if (!provider) return;            
             const contract = new ethers.Contract(
                 contractAddress,
                 CertificateVerification.abi,
@@ -42,16 +44,13 @@ function Verify({ params }: { params: { id: string } }) {
                 setVerified(true);
                 console.log("verified");
             } catch (error) {
-                setLoading(false);
-                setVerified(false);
-            }
-            return () => {
+                console.log(error);
                 setLoading(false);
                 setVerified(false);
             }
         }
         verifyCert();
-    }, [])
+    }, [provider])
 
     return (
 
@@ -71,12 +70,7 @@ function Verify({ params }: { params: { id: string } }) {
 
                         </div>
                         <div className="flex w-full justify-center">
-                            <img src={certImg} width={500} height={500} />
-
-                        </div>
-                        <div className="flex w-full justify-center">
-                            <img src={certImg} width={500} height={500} />
-
+                            <Image alt="certificate-preview" src={certImg} width={500} height={500} />
                         </div>
                     </div> : <div className="w-full min-h-screen">
                         <div className="flex md:flex-row flex-col w-[70%] h-full p-10 justify-center items-center mx-auto">
