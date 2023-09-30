@@ -27,7 +27,7 @@ export default function Page() {
             <h2>this shows the details about the organization</h2>
             <h1 className="font-bold">An organization can perform the following</h1>
             <div className="flex flex-col gap-y-2 md:flex-row gap-x-5 py-5">
-                <Card className="w-[300px] text-start">
+                <Card className="flex flex-col w-[300px] text-start justify-around">
                     <CardHeader>
                         <CardTitle>Issue Certificate</CardTitle>
                     </CardHeader>
@@ -35,7 +35,7 @@ export default function Page() {
                     <CardContent className="py-2 font-thin">
                         <p>You can issue certificates which are directly connected to the blockchain</p>
                     </CardContent>
-                    <CardFooter className="py-3 w-full">
+                    <CardFooter className="flex h-full py-3 w-full justify-end">
                         <Link href="/organization/issue" className={buttonVariants({ variant: "default" }) + "group w-full"}>
                             <span className="flex items-center justify-center group w-full">
                                 Go

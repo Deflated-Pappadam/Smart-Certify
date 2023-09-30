@@ -5,18 +5,18 @@ import Link from "next/link"
 
 export default function Home() {
   return (
-    <main>
-      <div className='flex flex-col items-center justify-center w-full h-full min-h-screen'>
-        <div className='text-[150px] text-center' >Smart Certify</div>
-        <div className="flex gap-x-3">
-          <Button asChild className="w-[220px] py-3 text-xl">
+    <main className="w-full h-full min-h-screen">
+      <div className="flex flex-col w-full h-full items-center justify-center min-h-screen">
+        <div className="md:text-[150px] text-[90px] text-center">Smart Certify</div>
+        <div className="md:text-[25px] text-[20px] font-light mb-4 text-center w-[80%]">A blockchain based certificate verification system.</div>
+        <div className="flex md:flex-row flex-col gap-3 p-4">
+          <Button asChild className="w-[200px] p-6 text-xl rounded-3xl">
             <Link href="/organization/login">Organization</Link>
           </Button>
-          <Button asChild className="w-[220px] py-3 text-xl">
+          <Button asChild className="w-[200px] p-6 text-xl rounded-3xl border border-black  bg-white text-black">
             <Link href="/user/dash">User</Link>
           </Button>
         </div>
-
       </div>
     </main>
   )
