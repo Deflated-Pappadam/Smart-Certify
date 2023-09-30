@@ -11,9 +11,9 @@ import { useContext, useEffect } from "react"
 
 export default function Page() {
     const router = useRouter();
-    const metaMaskContext = useContext(MetaMaskContext);
-    if (!metaMaskContext) return null;
+    const metaMaskContext = useContext(MetaMaskContext)!;
     const { account, connectWallet, error } = metaMaskContext;
+
     useEffect(() => {
         if (!account) {
             router.push('/organization/login');

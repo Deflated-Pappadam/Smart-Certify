@@ -24,8 +24,7 @@ export default function Page() {
     const contractAddress = "0xEFB8357E5A292c195a20119C784EaeF0e2d6Afe8";
     const router = useRouter();
     const { toast } = useToast()
-    const metaMaskContext = useContext(MetaMaskContext);
-    if (!metaMaskContext) return null;
+    const metaMaskContext = useContext(MetaMaskContext)!;
     const { account, error } = metaMaskContext;
     useEffect(() => {
         if (!account) {

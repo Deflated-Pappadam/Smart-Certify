@@ -29,6 +29,7 @@ import { ethers } from "ethers"
 import { addDoc, collection, serverTimestamp } from "firebase/firestore"
 import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { Calendar as CalendarIcon, Loader2 } from "lucide-react"
+import NextImage from "next/image"
 import { useRouter } from "next/navigation"
 import { PDFDocument, PDFName } from 'pdf-lib'
 import QRCode from 'qrcode'
@@ -60,8 +61,7 @@ export default function Component() {
     const [downloadURL, setDownloadURL] = useState<string>("");
 
     const router = useRouter();
-    const metaMaskContext = useContext(MetaMaskContext);
-    if (!metaMaskContext) return null;
+    const metaMaskContext = useContext(MetaMaskContext)!;
     const { account, connectWallet, error } = metaMaskContext;
     useEffect(() => {
         if (!account) {
@@ -382,7 +382,7 @@ export default function Component() {
                                     </DialogHeader>
                                     <Separator />
                                     <div className="w-full justify-center flex gap-4 py-4 items-center">
-                                        <img width={300} height={300} src={certificateImage} alt="" crossOrigin="anonymous" />
+                                        <NextImage width={300} height={300} src={certificateImage} alt="" crossOrigin="anonymous" />
                                     </div>
                                     <Separator />
                                     <DialogFooter>

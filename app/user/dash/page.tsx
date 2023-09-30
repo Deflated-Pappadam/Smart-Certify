@@ -50,10 +50,10 @@ export default function Component() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {allData.map((row) => {
+            {allData.map((row, idx) => {
               console.log(row);
               return (
-                <TableRow>
+                <TableRow key={idx}>
                   <TableCell>{new Date(row.issuedOn.seconds*1000).toString().split(" ").splice(0, 4).join(" ")}</TableCell>
                   <TableCell>{row.issuerName}</TableCell>
                   <TableCell>
