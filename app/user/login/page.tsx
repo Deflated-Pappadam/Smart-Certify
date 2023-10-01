@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-function loginPage() {
+function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [aadhar, setAadhar] = useState("");
@@ -50,4 +50,4 @@ function loginPage() {
   )
 }
 
-export default loginPage
+export default LoginPage
