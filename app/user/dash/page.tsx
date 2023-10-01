@@ -24,7 +24,6 @@ export default function Component() {
       );
     });
     return () => {
-      console.log(allData);
       unsub();
     };
   }, []);

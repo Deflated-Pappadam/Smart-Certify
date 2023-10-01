@@ -5,14 +5,14 @@ import BackButton from "@/components/BackButton"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
-import { MetaMaskContext } from "@/context/MetaMaskContext"
+import { useProtected } from "@/hooks/useProtected"
 import { cn } from "@/lib/utils"
 import { ethers } from "ethers"
 import { Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import * as pdfjsLib from 'pdfjs-dist'
 import Pixelmatch from "pixelmatch"
-import { useContext, useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 const pdfjsWorker = require('pdfjs-dist/build/pdf.worker.entry');
 
 export default function Page() {
@@ -22,15 +22,8 @@ export default function Page() {
 
     pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
     const contractAddress = "0xEFB8357E5A292c195a20119C784EaeF0e2d6Afe8";
-    const router = useRouter();
+    useProtected()
     const { toast } = useToast()
-    const metaMaskContext = useContext(MetaMaskContext)!;
-    const { account, error } = metaMaskContext;
-    useEffect(() => {
-        if (!account) {
-            router.push('/organization/login');
-        }
-    }, [account]);
 
     async function verifyCert(blockId: string) {
         let provider = null;
@@ -199,7 +192,6 @@ export default function Page() {
                         <Input ref={fileInputRef} onChange={()=> {setVerified(false)}} id="pdf" type="file" />
                     </div>
                     <Button variant={"secondary"} className={cn(`w-full ${verified && `border-2 bg-transpanent border-green-400 rounded-lg`}`)} disabled={loading || verified} onClick={verifyCertificate}>{ verified? <>Verified</> : <>{loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /><span>Verifying...</span></> : <span>Verify</span>}</>}</Button>
-                    {error && <p className="text-red-600">{error}</p>}
                 </div>
             </div>
         </div>

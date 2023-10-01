@@ -10,13 +10,12 @@ export default function Home() {
         <div className='text-[150px] text-center' >Smart Certify</div>
         <div className="flex gap-x-3">
           <Button asChild className="w-[220px] py-3 text-xl">
-            <Link href="/organization/login">Organization</Link>
+            <Link href="/organization/dash">Organization</Link>
           </Button>
           <Button asChild className="w-[220px] py-3 text-xl">
             <Link href="/user/dash">User</Link>
           </Button>
         </div>
-
       </div>
     </main>
   )

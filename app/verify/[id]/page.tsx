@@ -49,7 +49,7 @@ function Verify({ params }: { params: { id: string } }) {
             }
         }
         verifyCert();
-    }, [provider])
+    }, [provider, params.id])
 
     return (
 

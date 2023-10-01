@@ -20,7 +20,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { Separator } from "@/components/ui/separator"
-import { MetaMaskContext } from "@/context/MetaMaskContext"
+import { useProtected } from "@/hooks/useProtected"
 import { cn } from "@/lib/utils"
 import { db, storage } from "@/utils/firebase"
 import { captureCanvasImage } from "@/utils/helper"
@@ -60,34 +60,8 @@ export default function Component() {
     const [wallet, setWallet] = useState<string>("");
     const [downloadURL, setDownloadURL] = useState<string>("");
 
-    const router = useRouter();
-    const metaMaskContext = useContext(MetaMaskContext)!;
-    const { account, connectWallet, error } = metaMaskContext;
-    useEffect(() => {
-        if (!account) {
-            router.push('/organization/login');
-        }
-    }, [account]);
-
+    useProtected()
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-    useEffect(() => {
-        if (window.ethereum == null) {
-            setMetaMask(false);
-            {
-                toast.error("MetaMask Not Installed", { theme: "dark", toastId: "meta-not-installed" },);
-            }
-            console.log("MetaMask not installed");
-
-        } else {
-            setMetaMask(true);
-            window.ethereum.request({ method: "eth_requestAccounts" }).then(async (accounts: string[]) => {
-                setWallet(accounts[0]);
-                setProvider(new ethers.BrowserProvider(window.ethereum));
-                if (provider) setSigner(await provider.getSigner());
-            });
-        }
-    }, [])
 
     function Download() {
         if (downloadURL.length > 0) {

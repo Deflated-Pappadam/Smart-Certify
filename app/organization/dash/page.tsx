@@ -3,23 +3,12 @@ import BackButton from "@/components/BackButton"
 import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { MetaMaskContext } from "@/context/MetaMaskContext"
+import { useProtected } from "@/hooks/useProtected"
 import { ArrowUpRight, Building2 } from "lucide-react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useContext, useEffect } from "react"
 
 export default function Page() {
-    const router = useRouter();
-    const metaMaskContext = useContext(MetaMaskContext)!;
-    const { account, connectWallet, error } = metaMaskContext;
-
-    useEffect(() => {
-        if (!account) {
-            router.push('/organization/login');
-        }
-    }, [account]);
-
+    useProtected();
     return (
         <div className="min-h-screen flex flex-col pt-10 justify-center text-center items-center" >
             <BackButton url="/"/>
@@ -36,7 +25,7 @@ export default function Page() {
                         <p>You can issue certificates which are directly connected to the blockchain</p>
                     </CardContent>
                     <CardFooter className="py-3 w-full">
-                        <Link href="/organization/issue" className={buttonVariants({ variant: "default" }) + "group w-full"}>
+                        <Link href="/organization/dash/issue" className={buttonVariants({ variant: "default" }) + "group w-full"}>
                             <span className="flex items-center justify-center group w-full">
                                 Go
                                 <ArrowUpRight className="group-hover:[transform:rotate(45deg)] duration-200" />
@@ -53,7 +42,7 @@ export default function Page() {
                         <p>You can verify the authenticity of certificates which are stored on the blockchain</p>
                     </CardContent>
                     <CardFooter className="py-3">
-                        <Link href="/organization/verify" className={buttonVariants({ variant: "default" }) + "group w-full"} >
+                        <Link href="/organization/dash/verify" className={buttonVariants({ variant: "default" }) + "group w-full"} >
                             <span className="flex items-center justify-center group w-full">
                                 Go
                                 <ArrowUpRight className="group-hover:[transform:rotate(45deg)] duration-200" />
