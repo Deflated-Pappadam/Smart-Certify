@@ -34,7 +34,7 @@ export default function Component() {
       <main className="flex-grow p-6">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-lg font-medium">My Certificates</h1>
-          <Card className="w-[300px] h-100px bg-slate-100">
+          <Card className="w-[300px] h-100px bg-slate-100 dark:text-black">
             <CardHeader>Rhon S George</CardHeader>
           </Card>
         </div>

@@ -277,7 +277,7 @@ export default function Component() {
         <div className="flex items-center justify-center h-screen">
             <BackButton url="/organization/dash" disabled={generating}/>
             <canvas hidden ref={canvasRef}></canvas>
-            {metaMask ? <Card>
+            {metaMask ? <Card className="md:m-0 m-2">
                 <CardHeader>
                     <div>
                         <h2 className="text-3xl font-semibold">Issue Cerificate</h2>
