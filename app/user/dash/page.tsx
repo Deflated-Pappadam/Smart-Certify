@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { db } from "@/utils/firebase";
+import { db } from "@/lib/firebase";
 import { DocumentData, collection, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 

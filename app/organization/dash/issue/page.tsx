@@ -22,8 +22,7 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { useProtected } from "@/hooks/useProtected"
 import { cn } from "@/lib/utils"
-import { db, storage } from "@/utils/firebase"
-import { captureCanvasImage } from "@/utils/helper"
+import { db, storage } from "@/lib/firebase"
 import { format } from "date-fns"
 import { ethers } from "ethers"
 import { addDoc, collection, serverTimestamp } from "firebase/firestore"
@@ -62,6 +61,13 @@ export default function Component() {
 
     useProtected()
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+    function captureCanvasImage(canvas: HTMLCanvasElement): Promise<string> {
+        return new Promise((resolve) => {
+          const image = canvas.toDataURL('image/png').replace(/^data:image\/png;base64,/, '');
+          resolve(image);
+        });
+      }
 
     function Download() {
         if (downloadURL.length > 0) {

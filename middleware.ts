@@ -23,4 +23,4 @@ export default withAuth(
         }
     })
 
-export const config = { matcher: ["/organization/dash", "/organization/dash/:path*"] }
+export const config = { matcher: ["/organization/dash", "/organization/dash/:path*", "/user/dash"] }
