@@ -11,41 +11,93 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import axios from 'axios';
+import { UserCredential } from 'firebase/auth';
+import { signIn } from 'next-auth/react';
+import { Eye, EyeOff } from 'lucide-react';
+import { toast } from '@/components/ui/use-toast';
+import { Separator } from '@/components/ui/separator';
+import Link from 'next/link';
+import BackButton from '@/components/BackButton';
 
 function SignUpPage() {
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const [aadhar, setAadhar] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [aadhaarNo, setAadhaarNo] = useState("");
+
+  function SignUp() {
+    axios
+      .post("/api/auth/signup", {
+        email,
+        name,
+        aadhaarNo,
+        password
+      })
+      .then((response) => {
+        console.log(response);
+        
+        if (response.status === 200) {
+          signIn("credentials", {
+            type: "web2",
+            email: email,
+            password: password,
+            callbackUrl: "/user/dash"
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toast({variant: "destructive", description: "Failed to create user"})
+      });
+  }
 
   return (
     <div className='w-full h-screen flex justify-center items-center'>
-      <Card className="w-[350px]">
-      <CardHeader>
-        <CardTitle>Signup</CardTitle>
-        <CardDescription>Enter the Details</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form>
-          <div className="grid w-full items-center gap-7">
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Email</Label>
-              <Input id="name" placeholder="Enter the Email" />
+      <BackButton url="/user/login"/>
+      <Card>
+        <CardHeader>
+          <CardTitle>Signup</CardTitle>
+          <CardDescription>Create your smart certify locker</CardDescription>
+        </CardHeader>
+        <Separator />
+        <CardContent className='pt-3'>
+          <form>
+            <div className="grid w-full items-center gap-7">
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="email">Email</Label>
+                <Input onChange={(e)=> setEmail(e.target.value)} value={email} id="email" placeholder="Enter the Email" />
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="name">Name</Label>
+                <Input onChange={(e)=> setName(e.target.value)} value={name} id="name" placeholder="Enter your name" />
+              </div>
+
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="aadhaar">Aadhaar number</Label>
+                <Input onChange={(e)=> setAadhaarNo(e.target.value)} value={aadhaarNo} id="aadhaar" placeholder="Enter the Aadhaar number" />
+              </div>
+              <div className="flex flex-col space-y-1.5 relative">
+                <Label htmlFor="password">Password</Label>
+                <Input onChange={(e)=> setPassword(e.target.value)} value={password} type={showPassword ? 'text' : 'password'} id="password" placeholder="Enter the password" />
+                <div className="absolute inset-y-9 right-0 pr-3 flex items-center text-gray-400 cursor-pointer">
+                  {showPassword ? (
+                    <Eye onClick={()=> setShowPassword(false)} />
+                  ) : (
+                    <EyeOff onClick={()=> setShowPassword(true)} />
+                  )}
+                </div>
+              </div>
             </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Password</Label>
-              <Input id="name" placeholder="Enter the password" />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Aadhar number</Label>
-              <Input id="name" placeholder="Enter the Aadhar number" />
-            </div>
-          </div>
-        </form>
-      </CardContent>
-      <CardFooter className="flex justify-between">
-        <Button className='w-full'>Login</Button>
-      </CardFooter>
-    </Card>
+          </form>
+        </CardContent>
+        <CardFooter className="flex flex-col justify-between">
+          <Button disabled={!email || !password || !aadhaarNo || !name} onClick={SignUp} className='w-full'>Sign Up</Button>
+          <span className='flex items-center py-2'><p className='text-muted-foreground text-sm'>already have an account</p><Button className='justify-start w-max m-0 px-0 pl-[1ch] h-2 py-3' asChild variant="link"><Link href={"/user/login"}>Sign In</Link></Button></span>
+        </CardFooter>
+      </Card>
     </div>
   )
 }

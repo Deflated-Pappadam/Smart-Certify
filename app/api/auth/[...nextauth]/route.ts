@@ -1,23 +1,40 @@
+import { auth } from '@/lib/firebase';
 import { getAddress } from 'ethers'
-import NextAuth, { AuthOptions } from 'next-auth'
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
-const authOptions: AuthOptions = {
+const handler = NextAuth({
   providers: [
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        type: { label: "type", type: "text" }, // Can be either web2 or web3
+        type: { label: "authType", type: "text" }, // Can be either web2 or web3
         address: { label: "walletAddress", type: "text" },
+        email: { label: "userEmail", type: "text"  },
+        password: { label: "userPassword", type: "text"  },
       },
-      async authorize(credentials) {
-        if (!Boolean(getAddress(credentials?.address!))) {
-          throw new Error("Invalid Wallet");
+      async authorize(credentials): Promise<any> {
+        if (
+          !credentials?.type ||
+          (credentials?.type !== "web2" && credentials?.type !== "web3")
+        ) {
+          throw new Error("Must Specify Type of Login");
         }
-        return {
-          id: credentials?.address,
-          name: credentials?.type, 
-        } as any;
+        if (credentials.type == "web3") {
+          if (!Boolean(getAddress(credentials?.address!))) {
+            throw new Error("Invalid Wallet");
+          }
+          return {
+            id: credentials?.address,
+            name: credentials?.type, 
+          };
+        }
+        else {
+          if (!credentials.email || !credentials.password) throw new Error("Email and password not provided");
+          const {user} = await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
+          return { email: user.email, name: credentials.type }
+        }
       },
     }),
   ],
@@ -30,19 +47,21 @@ const authOptions: AuthOptions = {
   },
   callbacks: {
     async session({ session, token }) {
-      session.user.address = token.sub as string;
+      if (token.email) {
+        session.user.email = token.email;
+      }
+      if (token.sub) {
+        session.user.address = token.sub as string;
+      }
       return session
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: '/',
     signOut: '/',
     error: '/',
     newUser: '/',
   },
-}
-
-const handler = NextAuth(authOptions);
+});
 
 export { handler as GET, handler as POST };

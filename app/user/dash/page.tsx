@@ -10,11 +10,18 @@ import {
 } from "@/components/ui/table";
 import { db } from "@/lib/firebase";
 import { DocumentData, collection, onSnapshot } from "firebase/firestore";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Component() {
   const [allData, setAllData] = useState<DocumentData[]>([]);
-
+  const session = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect("/user/login")
+    },
+  });
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "certificates"), (snapshot) => {
       setAllData(
@@ -50,10 +57,9 @@ export default function Component() {
           </TableHeader>
           <TableBody>
             {allData.map((row, idx) => {
-              console.log(row);
               return (
                 <TableRow key={idx}>
-                  <TableCell>{new Date(row.issuedOn.seconds*1000).toString().split(" ").splice(0, 4).join(" ")}</TableCell>
+                  <TableCell>{new Date(row.issuedOn.seconds * 1000).toString().split(" ").splice(0, 4).join(" ")}</TableCell>
                   <TableCell>{row.issuerName}</TableCell>
                   <TableCell>
                     <span className="text-black-800 rounded-md">{row.eventName}</span>
@@ -72,3 +78,5 @@ export default function Component() {
     </div>
   );
 }
+
+Component.requireAuth = true;

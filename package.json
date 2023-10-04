@@ -21,6 +21,7 @@
     "@types/pdfjs-dist": "^2.10.378",
     "@types/qrcode": "^1.5.2",
     "@types/xml2js": "^0.4.12",
+    "axios": "^1.5.1",
     "bufferutil": "^4.0.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
