@@ -16,16 +16,15 @@ import { useEffect, useState } from "react";
 
 export default function Component() {
   const [allData, setAllData] = useState<DocumentData[]>([]);
-  const session = useSession({
-    required: true,
-    onUnauthenticated() {
-      redirect("/user/login")
-    },
-  });
+  const { data: session, status } = useSession()
+
   useEffect(() => {
-    const unsub = onSnapshot(collection(db, "certificates"), (snapshot) => {
+    console.log(session)
+    if(!session?.user) return;
+    const unsub = onSnapshot(collection(db, `/aadharNo/${session.user.address}/certificate`), (snapshot) => {
       setAllData(
         snapshot.docs.map((doc) => {
+          console.log(doc)
           return doc.data();
         })
       );
@@ -33,7 +32,7 @@ export default function Component() {
     return () => {
       unsub();
     };
-  }, []);
+  }, [session]);
 
 
   return (

@@ -258,7 +258,7 @@ export default function Component() {
                         const response = await contract.issueCertificate(id, recipientName, aadhaarId, imageURL, BigInt(date?.getMilliseconds()!));
                         await response.wait();
                         console.log("response:", response);
-                        const docRef = await addDoc(collection(db, 'certificates'), {
+                        const docRef = await addDoc(collection(db, `/aadharNo/${aadhaarId}/certificate`), {
                             issuerName: orgName,
                             imgLink: imageURL,
                             eventName: eventName,
