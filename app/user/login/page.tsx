@@ -71,10 +71,10 @@ function SignUpPage() {
   }
 
   return (
-    <div className='w-full h-screen flex justify-center items-center'>
+    <div className=' h-screen flex justify-center items-center'>
       <BackButton url="/"/>
-      <Card>
-        <CardHeader>
+      <Card className=' md:min-w-[500px] min-w-[350px]'>
+        <CardHeader className='w-full'>
           <CardTitle>Login</CardTitle>
           <CardDescription>Create your smart certify locker</CardDescription>
         </CardHeader>
@@ -93,7 +93,7 @@ function SignUpPage() {
               <div className="flex flex-col space-y-1.5 relative">
                 <Label htmlFor="password">Password</Label>
                 <Input onChange={(e)=> setPassword(e.target.value)} value={password} type={showPassword ? 'text' : 'password'} id="password" placeholder="Enter the password" />
-                <div className="absolute inset-y-9 right-0 pr-3 flex items-center text-gray-400 cursor-pointer">
+                <div className="absolute inset-y-9 right-0 pr-3 pb-3 flex items-center text-gray-400 cursor-pointer">
                   {showPassword ? (
                     <Eye onClick={()=> setShowPassword(false)} />
                   ) : (

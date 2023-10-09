@@ -37,6 +37,8 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { v4 as uuidv4 } from 'uuid'
 
+let canvasImg ="https://cdn.discordapp.com/attachments/946819313342500914/1157381635214413834/of_participation.png?ex=65186724&is=651715a4&hm=c775ce17a5caff93d620f1cf9a5137775b0e8ce7ce877a1ea79bc0a07c2a6e53&";
+    
 declare global {
     interface Window {
         ethereum?: any
@@ -61,13 +63,14 @@ export default function Component() {
 
     useProtected()
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
+    
+    
     function captureCanvasImage(canvas: HTMLCanvasElement): Promise<string> {
         return new Promise((resolve) => {
-          const image = canvas.toDataURL('image/png').replace(/^data:image\/png;base64,/, '');
-          resolve(image);
+            const image = canvas.toDataURL('image/png').replace(/^data:image\/png;base64,/, '');
+            resolve(image);
         });
-      }
+    }
 
     function Download() {
         if (downloadURL.length > 0) {
@@ -80,6 +83,23 @@ export default function Component() {
             URL.revokeObjectURL(downloadURL);
         }
     }
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    const handleFileChange = () => {
+        const input = inputRef.current;
+        if (input?.files && input.files[0]) {
+            const file = input.files[0];
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                const result = e.target?.result as string;
+                console.log(result);
+                canvasImg=result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+    };
 
     async function generateCertificate() {
         setGenerating(true);
@@ -102,7 +122,11 @@ export default function Component() {
             ctx.imageSmoothingQuality = 'high';
             const bg = new Image();
             bg.setAttribute('crossorigin', 'anonymous');
-            bg.src = "https://cdn.discordapp.com/attachments/946819313342500914/1157381635214413834/of_participation.png?ex=65186724&is=651715a4&hm=c775ce17a5caff93d620f1cf9a5137775b0e8ce7ce877a1ea79bc0a07c2a6e53&";
+
+            bg.src = canvasImg;
+            console.log("Image:")
+            console.log(bg.src);
+
             bg.onload = async () => {
                 ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
                 const qrurl = await QRCode.toDataURL(`https://sihhack.vercel.app/verify/${id}`, { color: { dark: "#ffc000", light: "#00000000" }, width: 100 * 2 });
@@ -117,8 +141,8 @@ export default function Component() {
                     ctx.font = "34px Comic Sans MS";
                     ctx.fillText("has successfully completed a training", canvas.width / 2, canvas.height / 2 + 50 * 2)
                     ctx.fillText(`programme on ${eventName.toUpperCase()}`, canvas.width / 2, canvas.height / 2 + 75 * 2)
-                    ctx.fillText(`conducted by ${orgName.toUpperCase()}`, canvas.width / 2 , canvas.height / 2 + 100 * 2)
-                    ctx.fillText(date?.toString() ? date?.toString().split(" ").splice(1,3).join(" ") : "", canvas.width/2+20,canvas.height-80)
+                    ctx.fillText(`conducted by ${orgName.toUpperCase()}`, canvas.width / 2, canvas.height / 2 + 100 * 2)
+                    ctx.fillText(date?.toString() ? date?.toString().split(" ").splice(1, 3).join(" ") : "", canvas.width / 2 + 20, canvas.height - 80)
                     var imgData = canvas.toDataURL("image/jpeg", 1.0);
                     const blob = dataURItoBlob(imgData);
                     setCertificateImage(imgData);
@@ -264,8 +288,8 @@ export default function Component() {
         }
     }
 
+    
 
-    // Helper function to convert data URL to Blob
     const dataURItoBlob = (dataURI: string) => {
         const byteString = atob(dataURI.split(',')[1]);
         const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
@@ -281,7 +305,7 @@ export default function Component() {
 
     return (
         <div className="flex items-center justify-center h-screen">
-            <BackButton url="/organization/dash" disabled={generating}/>
+            <BackButton url="/organization/dash" disabled={generating} />
             <canvas hidden ref={canvasRef}></canvas>
             {metaMask ? <Card className="md:m-0 m-2">
                 <CardHeader>
@@ -292,7 +316,7 @@ export default function Component() {
                         </p>
                     </div>
                 </CardHeader>
-                <Separator/>
+                <Separator />
                 <CardContent>
                     <div className="space-y-3 p-3">
                         <div className="space-y-4">
@@ -326,30 +350,41 @@ export default function Component() {
                                     setAadhaarId(e.currentTarget.value);
                                 }} />
                             </div>
-                            <div className="flex flex-col space-y-2">
-                                <Label>Issue Date</Label>
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                        <Button
-                                            variant={"outline"}
-                                            className={cn(
-                                                "w-[280px] justify-start text-left font-normal",
-                                                !date && "text-muted-foreground"
-                                            )}
-                                        >
-                                            <CalendarIcon className="mr-2 h-4 w-4" />
-                                            {date ? format(date, "PPP") : <span>Pick a date</span>}
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-auto p-0">
-                                        <Calendar
-                                            mode="single"
-                                            selected={date}
-                                            onSelect={setDate}
-                                            initialFocus
-                                        />
-                                    </PopoverContent>
-                                </Popover>
+                            <div className="flex gap-2 flex-col md:flex-row">
+                                <div className="flex flex-col">
+                                    <Label>Issue Date</Label>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <Button
+                                                variant={"outline"}
+                                                className={cn(
+                                                    "w-[280px] justify-start text-left font-normal",
+                                                    !date && "text-muted-foreground"
+                                                )}
+                                            >
+                                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                                {date ? format(date, "PPP") : <span>Pick a date</span>}
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto p-0">
+                                            <Calendar
+                                                mode="single"
+                                                selected={date}
+                                                onSelect={setDate}
+                                                initialFocus
+                                            />
+                                        </PopoverContent>
+                                    </Popover>
+                                </div>
+
+                                <div className="grid w-full max-w-sm items-center ">
+                                    <Label htmlFor="template">Template</Label>
+                                    <Input id="template"
+                                        type="file"
+                                        ref={inputRef}
+                                        accept="image/*"
+                                        onChange={handleFileChange} />
+                                </div>
                             </div>
                             <Dialog open={open} onOpenChange={setOpen}>
                                 <Button variant="default" className={cn("w-[180px]")} disabled={generating} onClick={generateCertificate}>{generating ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /><span>Generating...</span></> : <span>Generate</span>}</Button>
