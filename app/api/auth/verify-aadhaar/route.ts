@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 export async function POST(request: Request) {
@@ -14,7 +14,7 @@ export async function POST(request: Request) {
             } 
             return NextResponse.json({ error: "A User with that aadhaar no already exists" }, { status: 400 })
         }
-        return NextResponse.json({ error: "A User with that aadhaar no already exists" }, { status: 400 })
+        return NextResponse.json({ error: "This user is not yet registered" }, { status: 400 })
     } catch (error) {
         return NextResponse.json({ error: "Failed to create a new User" }, { status: 400 })     
     }

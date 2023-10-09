@@ -12,9 +12,7 @@ export default async function middleware(req: NextRequest , event: NextFetchEven
                     const token = await getToken({
                         req,
                         secret: process.env.JWT_SECRET
-                    })
-                    console.log("middleware:"+token);
-                    
+                    })                    
                     if (!token) return false;
                     else {
                         if (token.name === "web3") return Boolean(getAddress(token?.sub ?? ""));

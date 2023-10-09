@@ -1,8 +1,8 @@
 import { auth } from '@/lib/firebase';
-import { getAddress } from 'ethers'
+import { getAddress } from 'ethers';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import NextAuth from 'next-auth'
-import CredentialsProvider from 'next-auth/providers/credentials'
+import NextAuth from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
 
 const handler = NextAuth({
   providers: [
@@ -11,6 +11,7 @@ const handler = NextAuth({
       credentials: {
         type: { label: "authType", type: "text" }, // Can be either web2 or web3
         address: { label: "walletAddress", type: "text" },
+        aadhaarNo: { label: "aadhaarNo", type: "text" },
         email: { label: "userEmail", type: "text"  },
         password: { label: "userPassword", type: "text"  },
       },
@@ -32,8 +33,11 @@ const handler = NextAuth({
         }
         else {
           if (!credentials.email || !credentials.password) throw new Error("Email and password not provided");
-          const {user} = await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
-          return { email: user.email, name: credentials.type }
+          const {user} = await signInWithEmailAndPassword(auth, credentials.email, credentials.password).catch((error)=> {
+            console.log(error);
+              throw new Error(error.message);
+          });
+          return { id: credentials.aadhaarNo, email: user.email, name: credentials.type };
         }
       },
     }),
@@ -49,6 +53,9 @@ const handler = NextAuth({
     async session({ session, token }) {
       if (token.email) {
         session.user.email = token.email;
+        session.user.address = token.sub as string;
+
+        console.log(session);
       }
       if (token.sub) {
         session.user.address = token.sub as string;
@@ -60,8 +67,6 @@ const handler = NextAuth({
   pages: {
     signIn: '/',
     signOut: '/',
-    error: '/',
-    newUser: '/',
   },
 });
 

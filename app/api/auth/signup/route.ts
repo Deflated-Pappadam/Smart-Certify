@@ -1,19 +1,19 @@
 import { NextResponse } from "next/server";
 import { collection, doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
-import { createUserWithEmailAndPassword, deleteUser } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 export async function POST(request: Request) {
     const body = await request.json();
 
     const { email, name, password, aadhaarNo } = body;    
     try {
-        const docRef = doc(db, "registeredAadhaarNos", aadhaarNo);
+        const docRef = doc(db, "registeredAadhaarNos", email);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) return NextResponse.json({ error: "A User with that aadhaar no already exists" }, { status: 400 })
         await createUserWithEmailAndPassword(auth, email, password);
         const usersRef = collection(db, "registeredAadhaarNos");
-        await setDoc(doc(usersRef, aadhaarNo), {
+        await setDoc(doc(usersRef, email), {
             name,
             aadhaarNo,
             email,

@@ -14,10 +14,10 @@ import { Label } from "@/components/ui/label"
 import axios from 'axios';
 import { UserCredential } from 'firebase/auth';
 import { signIn, useSession } from 'next-auth/react';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { Separator } from '@/components/ui/separator';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation'
 import Link from 'next/link';
 import BackButton from '@/components/BackButton';
 
@@ -25,9 +25,12 @@ function SignUpPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [signingIn, setSigningIn] = useState(false);
   const [aadhaarNo, setAadhaarNo] = useState("");
+  const router = useRouter()
 
   function SignIn() {
+    setSigningIn(true);
     axios
       .post("/api/auth/verify-aadhaar", {
         email,
@@ -39,14 +42,29 @@ function SignUpPage() {
             type: "web2",
             email: email,
             password: password,
-            callbackUrl: "/user/dash"
+            callbackUrl: "/user/dash",
+            redirect: false,
+          }).then((res)=> {
+            console.log(res);
+            if (res?.error) {
+              console.log(res?.error);
+              toast({variant: "destructive", description: res?.error});
+              setSigningIn(false);
+            }
+            if (res?.url) {
+              setSigningIn(false);
+              router.push(res.url);
+            }
+
           }).catch((err) => {
+            setSigningIn(false);
             console.log(err);
             toast({variant: "destructive", description: "Failed to create user"})
-          });;
+          });
         }
       })
       .catch((err) => {
+        setSigningIn(false);
         console.log(err);
         toast({variant: "destructive", description: "Failed to create user"})
       });
@@ -88,7 +106,7 @@ function SignUpPage() {
           </form>
         </CardContent>
         <CardFooter className="flex flex-col justify-between">
-          <Button disabled={!email || !password || !aadhaarNo} onClick={SignIn} className='w-full'>Sign In</Button>
+          <Button disabled={!email || !password || !aadhaarNo} onClick={SignIn} className='w-full'><>{signingIn ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /><span>Signing In...</span></> : <span>Sign In</span>}</></Button>
           <span className='flex items-center py-2'><p className='text-muted-foreground text-sm'>not a member</p><Button className='justify-start w-max m-0 px-0 pl-[1ch] h-2 py-3' asChild variant="link"><Link href={"/user/signup"}>Sign Up</Link></Button></span>
         </CardFooter>
       </Card>

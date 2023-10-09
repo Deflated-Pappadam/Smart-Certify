@@ -44,7 +44,8 @@ function SignUpPage() {
             type: "web2",
             email: email,
             password: password,
-            callbackUrl: "/user/dash"
+            callbackUrl: "/user/dash",
+            redirect: false,
           });
         }
       })
