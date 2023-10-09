@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+<p align="center">
 
-First, run the development server:
+  <img width="150" alt="favicon" src="https://github.com/Deflated-Pappadam/sihhack/assets/79042374/1480464d-66b2-4bae-91be-1fdc38aa52f2">
+</p>
+ <h1 align="center" >SMART CERTIFY</h1>
+ 
+![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/33eb61a9-6d4c-478b-b852-e2d0818e2b4d)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+<h2>What is Smart Certify?</h2>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+<h2>Why do we need it?</h2>
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+<h2>How to use it?</h3>
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
+### Organisation
 
-To learn more about Next.js, take a look at the following resources:
+<p>1. Connect your MetaMask Wallet</p>
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/ff530342-0063-4e3c-b290-d4b8c834349d)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+<p>2. Make sure to have the <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?utm_source=ext_sidebar&hl=en-US">MetaMask extension </a> installed.</p>
 
-## Deploy on Vercel
+![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/727c9722-2561-4c5d-9dc0-c0fe0a1d6141)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+<p>3.Choose whether to issue or verify a Certificate</p>
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/8b447d81-be48-44ff-823e-9b74e4a4af7e)
+
+<h4>Issue the certificate</h4>
+
+<p>4.Enter the details</p>
+
+
+![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/add149ab-6771-4929-8a93-e337f67b7538)
+
+<p>5. Confirm the transaction</p>
+
+![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/5dda235c-4136-40d4-a7a1-fbf8fb772ed7)
+
+<p>6. And it's done</p>
+
+![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/f046b2f8-e3c8-43fb-b3c0-7bb27bc8dcfa)
+
+<p>7. Enjoy</p>
+
+![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/d1575fb3-53b7-4ef4-bb75-b94116a3d63e)
+
+<h4>Verify the certificate</h4>
+
+<p>Upload it and click verify</p>
+
+![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/1225bd85-7e7d-43fb-afea-30f759686f1e)
+
+![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/c5d83522-8f90-4fcc-a4b8-db9fc12d126c)
+
+
+
