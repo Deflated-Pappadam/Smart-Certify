@@ -19,14 +19,15 @@ import { toast } from '@/components/ui/use-toast';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 import BackButton from '@/components/BackButton';
+import { useRouter } from 'next/navigation';
 
 function SignUpPage() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
   const [aadhaarNo, setAadhaarNo] = useState("");
+  const router = useRouter()
 
   function SignUp() {
     axios
@@ -46,6 +47,18 @@ function SignUpPage() {
             password: password,
             callbackUrl: "/user/dash",
             redirect: false,
+          }).then((res)=> {
+            console.log(res);
+            if (res?.error) {
+              console.log(res?.error);
+              toast({variant: "destructive", description: res?.error});
+            }
+            if (res?.url) {
+              router.push(res.url);
+            }
+          }).catch((err) => {
+            console.log(err);
+            toast({variant: "destructive", description: "Failed to create user"})
           });
         }
       })
@@ -58,7 +71,7 @@ function SignUpPage() {
   return (
     <div className='w-full h-screen flex justify-center items-center'>
       <BackButton url="/user/login"/>
-      <Card className='md:min-w-[500px] min-w-[350px]'>
+      <Card>
         <CardHeader>
           <CardTitle>Signup</CardTitle>
           <CardDescription>Create your smart certify locker</CardDescription>

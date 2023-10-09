@@ -55,7 +55,6 @@ function SignUpPage() {
               setSigningIn(false);
               router.push(res.url);
             }
-
           }).catch((err) => {
             setSigningIn(false);
             console.log(err);
