@@ -5,7 +5,8 @@
 </p>
  <h1 align="center" >SMART CERTIFY</h1>
  
-![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/33eb61a9-6d4c-478b-b852-e2d0818e2b4d)
+![image]![image](https://github.com/Deflated-Pappadam/sihhack/assets/100425953/44af7be2-d4ff-4273-8ce3-3e1bda449e0b)
+
 
 <h2>What is Smart Certify?</h2>
 
