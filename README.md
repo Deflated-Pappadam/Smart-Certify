@@ -5,7 +5,8 @@
 </p>
  <h1 align="center" >SMART CERTIFY</h1>
  
-![image](https://github.com/Deflated-Pappadam/sihhack/assets/100425953/44af7be2-d4ff-4273-8ce3-3e1bda449e0b)
+![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/3c3c633b-f533-4b21-8775-4856bd645973)
+
 
 
 <h2>What is Smart Certify?</h2>
@@ -19,7 +20,8 @@
 
 <p>1. Connect your MetaMask Wallet</p>
 
-![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/ff530342-0063-4e3c-b290-d4b8c834349d)
+![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/baa3702e-2c65-4a7d-9ed8-9211d328d21c)
+
 
 <p>2. Make sure to have the <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?utm_source=ext_sidebar&hl=en-US">MetaMask extension </a> installed.</p>
 
@@ -27,22 +29,26 @@
 
 <p>3.Choose whether to issue or verify a Certificate</p>
 
-![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/8b447d81-be48-44ff-823e-9b74e4a4af7e)
+![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/e88fb745-aae0-464b-bcf7-e4debbcdd110)
+
 
 <h4>Issue the certificate</h4>
 
 <p>4.Enter the details</p>
 
 
-![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/add149ab-6771-4929-8a93-e337f67b7538)
+![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/4b96c7e7-e3f2-4dcd-a1a5-896a4d44b712)
+
 
 <p>5. Confirm the transaction</p>
 
-![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/5dda235c-4136-40d4-a7a1-fbf8fb772ed7)
+![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/58ccd59b-595c-4778-b108-398283540f9a)
+
 
 <p>6. And it's done</p>
 
-![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/f046b2f8-e3c8-43fb-b3c0-7bb27bc8dcfa)
+![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/d69ee338-3e16-424d-abd0-d08736f20429)
+
 
 <p>7. Enjoy</p>
 
@@ -52,9 +58,11 @@
 
 <p>Upload it and click verify</p>
 
-![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/1225bd85-7e7d-43fb-afea-30f759686f1e)
+![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/1b7ac0d4-3ef7-4ef7-897e-15e615cc71f3)
 
-![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/c5d83522-8f90-4fcc-a4b8-db9fc12d126c)
+
+![image](https://github.com/Deflated-Pappadam/sihhack/assets/79042374/e7651f3d-a888-460c-b44d-bd3a54e7b04f)
+
 
 
 
