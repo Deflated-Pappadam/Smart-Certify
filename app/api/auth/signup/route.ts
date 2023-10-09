@@ -14,7 +14,7 @@ export async function POST(request: Request) {
         if (docSnap.exists()) return NextResponse.json({ error: "A User with that aadhaar no already exists" }, { status: 400 })
         await createUserWithEmailAndPassword(auth, email, password);
         const usersRef = collection(db, "registeredAadhaarNos");
-        await setDoc(doc(usersRef, email), {
+        await setDoc(doc(usersRef, aadhaarNo), {
             name,
             aadhaarNo,
             email,
