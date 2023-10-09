@@ -42,6 +42,7 @@ function SignUpPage() {
             type: "web2",
             email: email,
             password: password,
+            aadhaarNo: aadhaarNo,
             callbackUrl: "/user/dash",
             redirect: false,
           }).then((res)=> {
