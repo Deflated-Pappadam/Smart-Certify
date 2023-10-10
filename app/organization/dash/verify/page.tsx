@@ -191,6 +191,10 @@ export default function Page() {
                     <div className={`grid w-full max-w-sm items-center gap-1.5`}>
                         <Input ref={fileInputRef} onChange={()=> {setVerified(false)}} id="pdf" type="file" />
                     </div>
+
+                    
+
+
                     <Button variant={"secondary"} className={cn(`w-full ${verified && `border-2 bg-transpanent border-green-400 rounded-lg`}`)} disabled={loading || verified} onClick={verifyCertificate}>{ verified? <>Verified</> : <>{loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /><span>Verifying...</span></> : <span>Verify</span>}</>}</Button>
                 </div>
             </div>

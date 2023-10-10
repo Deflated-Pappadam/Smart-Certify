@@ -72,7 +72,7 @@ function SignUpPage() {
   return (
     <div className='w-full h-screen flex justify-center items-center'>
       <BackButton url="/user/login"/>
-      <Card>
+      <Card className='md:min-w-[500px] min-w-[350px]'>
         <CardHeader>
           <CardTitle>Signup</CardTitle>
           <CardDescription>Create your smart certify locker</CardDescription>
