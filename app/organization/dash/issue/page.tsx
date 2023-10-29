@@ -246,6 +246,8 @@ export default function Component() {
                         const blob = new Blob([pdfBytes], { type: 'application/pdf' });
                         const url = URL.createObjectURL(blob);
                         setDownloadURL(url);
+                        const storagePdfRef = ref(storage, `canvas-pdfs/${id}.pdf`);
+                        await uploadBytes(storagePdfRef, blob);
                     }
 
                     await createPdfWithCanvasImage();
@@ -259,6 +261,7 @@ export default function Component() {
                         await response.wait();
                         console.log("response:", response);
                         const docRef = await addDoc(collection(db, `/aadharNo/${aadhaarId}/certificate`), {
+                            id, 
                             issuerName: orgName,
                             imgLink: imageURL,
                             eventName: eventName,

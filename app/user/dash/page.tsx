@@ -8,8 +8,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { db } from "@/lib/firebase";
+import { db, storage } from "@/lib/firebase";
 import { DocumentData, collection, onSnapshot } from "firebase/firestore";
+import { getDownloadURL, ref } from "firebase/storage";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -32,6 +33,21 @@ export default function Component() {
       unsub();
     };
   }, [session]);
+
+  function downloadPdf(id: string) {
+    const storageRef = ref(storage, `canvas-pdfs/${id}.png`);
+    getDownloadURL(storageRef).then((url)=> {
+      var link = document.createElement("a");
+      if (link.download !== undefined) {
+          link.setAttribute("href", url);
+          link.setAttribute("target", "_blank");
+          link.style.visibility = 'hidden';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+      }
+    });
+  }
 
 
   return (
@@ -63,8 +79,8 @@ export default function Component() {
                     <span className="text-black-800 rounded-md">{row.eventName}</span>
                   </TableCell>
                   <TableCell className="text-right">
-                    <a href={row.imgLink} target="blank" className="px-3 py-2 bg-blue-400 rounded-lg text-white">
-                      View
+                    <a onClick={() => downloadPdf(row.id)} target="blank" className="px-3 py-2 bg-blue-400 rounded-lg text-white">
+                      Download
                     </a>
                   </TableCell>
                 </TableRow>
