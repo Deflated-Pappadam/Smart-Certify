@@ -35,7 +35,7 @@ export default function Component() {
   }, [session]);
 
   function downloadPdf(id: string) {
-    const storageRef = ref(storage, `canvas-pdfs/${id}.png`);
+    const storageRef = ref(storage, `canvas-pdfs/${id}.pdf`);
     getDownloadURL(storageRef).then((url)=> {
       var link = document.createElement("a");
       if (link.download !== undefined) {
@@ -79,9 +79,9 @@ export default function Component() {
                     <span className="text-black-800 rounded-md">{row.eventName}</span>
                   </TableCell>
                   <TableCell className="text-right">
-                    <a onClick={() => downloadPdf(row.id)} target="blank" className="px-3 py-2 bg-blue-400 rounded-lg text-white">
+                    <button onClick={() => downloadPdf(row.id)} className="px-3 py-2 bg-blue-400 rounded-lg text-white">
                       Download
-                    </a>
+                    </button>
                   </TableCell>
                 </TableRow>
               );
