@@ -44,7 +44,7 @@ function SignUpPage() {
             password: password,
             aadhaarNo: aadhaarNo,
             callbackUrl: "/user/dash",
-            redirect: false,
+            redirect: true,
           }).then((res)=> {
             console.log(res);
             if (res?.error) {
