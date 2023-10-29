@@ -24,7 +24,6 @@ export default function Component() {
     const unsub = onSnapshot(collection(db, `/aadharNo/${session.user.address}/certificate`), (snapshot) => {
       setAllData(
         snapshot.docs.map((doc) => {
-          console.log(doc)
           return doc.data();
         })
       );
