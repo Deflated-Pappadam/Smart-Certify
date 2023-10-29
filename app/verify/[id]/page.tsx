@@ -14,24 +14,11 @@ function Verify({ params }: { params: { id: string } }) {
 
     const contractAddress = "0xEFB8357E5A292c195a20119C784EaeF0e2d6Afe8";
 
-    useEffect(() => {
+    useEffect(() => {        
         async function verifyCert() {
-            setProvider(new ethers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/${process.env.INFURA_API_KEY}`));
-            // if (window.ethereum == null) {
-            //     console.log("MetaMask not installed");
-            //     setProvider(new ethers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/${process.env.INFURA_API_KEY}`));
-            // } else {
-            //     if (!provider) {
-            //         window.ethereum.request({ method: "eth_requestAccounts" }).then(async (accounts: string[]) => {
-            //             setWallet(accounts[0]);
-            //             setProvider(new ethers.BrowserProvider(window.ethereum));
-            //         });
-            //         // setProvider(new ethers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/620a230b899844aca627a6dd6c0da8c5`));
-            //     }
-            // }
+            if (!provider) setProvider(new ethers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_API_KEY}`));
             setLoading(true);
             if (!provider) return;            
-            console.log(provider);
             
             const contract = new ethers.Contract(
                 contractAddress,
@@ -52,12 +39,12 @@ function Verify({ params }: { params: { id: string } }) {
                 setVerified(false);
             }
         }
-        verifyCert();
-    }, [provider, params.id])
+        verifyCert()
+    }, [provider])
 
     return (
 
-        <div className='flex items-center justify-center w-full min-h-screen bg-black text-white'>
+        <div className='flex items-center justify-center w-full min-h-screen bg-white text-black'>
             {loading ? <Loading /> : <div>
                 {verified ?
                     <div>
@@ -76,7 +63,7 @@ function Verify({ params }: { params: { id: string } }) {
                             <Image alt="certificate-preview" src={certImg} width={500} height={500} />
                         </div>
                     </div> : <div className="flex w-full h-full justify-center items-center  ">
-        <div className="md:text-[90px] text-[30px] text-center text-white"> Sorry, Your certificate is invalid!!</div></div>}
+        <div className="md:text-[90px] text-[30px] text-center text-black"> Sorry, Your certificate is invalid!!</div></div>}
             </div>}
         </div>
     )
