@@ -16,7 +16,7 @@ function Verify({ params }: { params: { id: string } }) {
 
     useEffect(() => {        
         async function verifyCert() {
-            if (!provider) setProvider(new ethers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_API_KEY}`));
+            if (!provider) setProvider(new ethers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/${process.env.INFURA_API_KEY}`));
             setLoading(true);
             if (!provider) return;            
             
