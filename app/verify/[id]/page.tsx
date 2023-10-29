@@ -16,19 +16,23 @@ function Verify({ params }: { params: { id: string } }) {
 
     useEffect(() => {
         async function verifyCert() {
-            if (window.ethereum == null) {
-                console.log("MetaMask not installed");
-                setProvider(new ethers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/${process.env.INFURA_API_KEY}`));
-            } else {
-                if (!provider) {
-                    window.ethereum.request({ method: "eth_requestAccounts" }).then(async (accounts: string[]) => {
-                        setWallet(accounts[0]);
-                        setProvider(new ethers.BrowserProvider(window.ethereum));
-                    });
-                }
-            }
+            setProvider(new ethers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/${process.env.INFURA_API_KEY}`));
+            // if (window.ethereum == null) {
+            //     console.log("MetaMask not installed");
+            //     setProvider(new ethers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/${process.env.INFURA_API_KEY}`));
+            // } else {
+            //     if (!provider) {
+            //         window.ethereum.request({ method: "eth_requestAccounts" }).then(async (accounts: string[]) => {
+            //             setWallet(accounts[0]);
+            //             setProvider(new ethers.BrowserProvider(window.ethereum));
+            //         });
+            //         // setProvider(new ethers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/620a230b899844aca627a6dd6c0da8c5`));
+            //     }
+            // }
             setLoading(true);
             if (!provider) return;            
+            console.log(provider);
+            
             const contract = new ethers.Contract(
                 contractAddress,
                 CertificateVerification.abi,
